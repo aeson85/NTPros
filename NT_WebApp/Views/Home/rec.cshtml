@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <title>弄堂 Brunch - 每日推荐</title>
+    <meta charset="UTF-8">
+	<meta http-equiv="Cache" content="no-cache">
+    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black">
+	<!--<link rel="stylesheet" href="css/weui.min.css">-->
+	<!--<link rel="stylesheet" href="./css/jquery-weui.min.css">-->
+	<!--<link rel="stylesheet" href="./css/font-awesome.min.css">-->
+	<!--<link rel="stylesheet" href="./css/ntui.css?v=0.0.1">-->
+
+	<link rel="stylesheet" asp-href-include="css/*.min.css" />
+	<link rel="stylesheet" asp-href-include="css/ntui.css" />
+	<script>
+		navMap ={
+			0:"@Url.Action("")",
+			1:"@Url.Action("rec")",
+			2:"@Url.Action("goods")",
+			3:"@Url.Action("order")",
+			4:"@Url.Action("reserve")",
+			5:"@Url.Action("discount")"
+		};
+	</script>
+</head>
+<body ontouchstart>
+	<div class="nt-loading" id="ntLoad"><span>0%</span></div>
+	<div class='page ui-panel-animation'>
+		<header data-module="header-nav"></header>
+		<div class='content'>
+			<div class="weui-flex">
+				<div class="weui-flex__item">
+					<div class='rec-item rec02'></div>
+					<div class='usr-bar'>
+						<div class='usr-bar-bg'></div>
+						<h2>￥36 <span>￥48</span></h2>
+						<p>NT Brunch热狗</p>
+						<i class="fa fa-bars usr-mark-ico-right" aria-hidden="true"></i>
+					</div>
+				</div>
+			</div>
+			<div class="weui-flex">
+				<div class="weui-flex__item">
+					<div class="weui-media-box">
+						<h4 class="weui-media-box__title">标题一</h4>
+						<p class="weui-media-box__desc">由各种物质组成的巨型球状天体，叫做星球。星球有一定的形状，有自己的运行轨道。</p>
+						<p class="weui-media-box__desc">NT Brunch的东东好好吃！！！</p>
+					</div>
+				</div>
+			</div>
+			<div class="weui-flex">
+				<div class="weui-flex__item">
+					<div class='rec-tip'></div>
+					<div class='rec-item rec01'></div>
+					<div class='usr-bar'>
+						<div class='usr-bar-bg'></div>
+						<h2>￥36 <span>￥48</span></h2>
+						<p>NT Brunch汉堡</p>
+						<i class="fa fa-bars usr-mark-ico-right" aria-hidden="true"></i>
+					</div>
+					
+				</div>
+				<div class="weui-flex__item">
+					<div class='rec-item rec03'></div>
+					<div class='usr-bar'>
+						<div class='usr-bar-bg'></div>
+						<h2>￥36 <span>￥48</span></h2>
+						<p>NT Brunch</p>
+						<i class="fa fa-bars usr-mark-ico-right" aria-hidden="true"></i>
+					</div>
+					
+				</div>
+			</div>
+
+			<div class="weui-flex">
+				<div class="weui-flex__item">
+					<div class='rec-item rec04'></div>
+					<div class='usr-bar'>
+						<div class='usr-bar-bg'></div>
+						<h2>￥36 <span>￥48</span></h2>
+						<p>NT Brunch</p>
+						<i class="fa fa-bars usr-mark-ico-right" aria-hidden="true"></i>
+					</div>
+					
+				</div>
+
+				<div class="weui-flex__item">
+					<div class='rec-item rec01'></div>
+					<div class='usr-bar'>
+						<div class='usr-bar-bg'></div>
+						<h2>￥36 <span>￥48</span></h2>
+						<p>NT Brunch</p>
+						<i class="fa fa-bars usr-mark-ico-right" aria-hidden="true"></i>
+					</div>
+					
+				</div>
+				<div class="weui-flex__item">
+					<div class='rec-item rec05'></div>
+					<div class='usr-bar'>
+						<div class='usr-bar-bg'></div>
+						<h2>￥36 <span>￥48</span></h2>
+						<p>NT Brunch</p>
+						<i class="fa fa-bars usr-mark-ico-right" aria-hidden="true"></i>
+					</div>
+					
+				</div>
+			</div>
+
+			<div class="weui-flex">
+				<div class="weui-flex__item">
+					<div class="weui-media-box">
+						<h4 class="weui-media-box__title">标题二</h4>
+						<p class="weui-media-box__desc">NT Brunch的东东真的好好吃！！！</p>
+					</div>
+				</div>
+			</div>
+			<div class="weui-flex">
+				<div class="weui-flex__item">
+					<div class='rec-item rec03'></div>
+					<div class='usr-bar'>
+						<div class='usr-bar-bg'></div>
+						<h2>￥36 <span>￥48</span></h2>
+						<p>NT Brunch</p>
+						<i class="fa fa-bars usr-mark-ico-right" aria-hidden="true"></i>
+					</div>
+					
+				</div>
+				<div class="weui-flex__item">
+					<div class='rec-item rec05'></div>
+					<div class='usr-bar'>
+						<div class='usr-bar-bg'></div>
+						<h2>￥36 <span>￥48</span></h2>
+						<p>NT Brunch</p>
+						<i class="fa fa-bars usr-mark-ico-right" aria-hidden="true"></i>
+					</div>
+				</div>
+			</div>
+			<div class="weui-flex">
+				<div class="weui-flex__item">
+					<div class="weui-media-box">
+						<p class="weui-media-box__desc">1月28日晚有活动~！</p>
+						<p class="weui-media-box__desc">活动特供产品，会员5折哦！！</p>
+					</div>
+				</div>
+			</div>
+			
+
+			<div class="weui-flex">
+				<div class="weui-flex__item">
+					<div class='rec-item rec04'></div>
+					<div class='usr-bar'>
+						<div class='usr-bar-bg'></div>
+						<h2>￥36 <span>￥48</span></h2>
+						<p>NT Brunch</p>
+						<i class="fa fa-bars usr-mark-ico-right" aria-hidden="true"></i>
+					</div>
+					
+				</div>
+				<div class="weui-flex__item">
+					<div class='rec-item rec01'></div>
+					<div class='usr-bar'>
+						<div class='usr-bar-bg'></div>
+						<h2>￥36 <span>￥48</span></h2>
+						<p>NT Brunch</p>
+						<i class="fa fa-bars usr-mark-ico-right" aria-hidden="true"></i>
+					</div>
+					
+				</div>
+			</div>
+
+			<div class="weui-flex">
+				<div class="weui-flex__item">
+					<div class='rec-item rec03'></div>
+				</div>
+				<div class="weui-flex__item">
+					<div class='rec-item rec02'></div>
+				</div>
+			</div>
+		</div>
+		<!--<div class="weui-loadmore">-->
+			<!--<i class="weui-loading"></i>-->
+			<!--<span class="weui-loadmore__tips">正在加载</span>-->
+		<!--</div>-->
+	</div>
+	<div class="swipe swipe-right">1</div>
+	<div class="swipe swipe-left .weui-popup__container">
+		<div class="weui-cells">
+			<div class="weui-cell">
+				<div class="weui-cell__hd"><img src=""></div>
+				<div class="weui-cell__bd">
+					<p>会员卡</p>
+				</div>
+				<div class="weui-cell__ft"></div>
+			</div>
+			<div class="weui-cell">
+				<div class="weui-cell__hd"><img src=""></div>
+				<div class="weui-cell__bd">
+					<p>地址管理</p>
+				</div>
+				<div class="weui-cell__ft"></div>
+			</div>
+
+			<div class="weui-cell">
+				<div class="weui-cell__hd"><img src=""></div>
+				<div class="weui-cell__bd">
+					<p>我的收藏</p>
+				</div>
+				<div class="weui-cell__ft"></div>
+			</div>
+
+			<div class="weui-cell">
+				<div class="weui-cell__hd"><img src=""></div>
+				<div class="weui-cell__bd">
+					<p>积分兑换</p>
+				</div>
+				<div class="weui-cell__ft"></div>
+			</div>
+
+			<div class="weui-cell">
+				<div class="weui-cell__hd"><img src=""></div>
+				<div class="weui-cell__bd">
+					<p>加盟合作</p>
+				</div>
+				<div class="weui-cell__ft"></div>
+			</div>
+		</div>
+	</div>
+
+<!--<script src="js/jquery-2.1.0.min.js"></script>-->
+<!--<script src="js/jquery.mobile-1.3.2.min.js"></script>-->
+<!--<script src="js/jquery-weui.min.js"></script>-->
+<!--<script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>-->
+<script asp-src-include="js/public/*.min.js"></script>
+<script asp-src-include="js/front/nt.js"></script>
+<script>
+nt.page = 1;
+</script>
+<script asp-src-include="js/front/init.js"></script>
+<!--<script src="js/init.js"></script>-->
+</body>
+</html>

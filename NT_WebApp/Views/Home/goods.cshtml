@@ -1,0 +1,90 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <title>弄堂 Brunch - 货架</title>
+    <meta charset="UTF-8">
+	<meta http-equiv="Cache" content="no-cache">
+    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black">
+	<link rel="stylesheet" asp-href-include="css/*.min.css" />
+	<link rel="stylesheet" asp-href-include="css/ntui.css" />
+	<script>
+		navMap ={
+			0:"@Url.Action("")",
+			1:"@Url.Action("rec")",
+			2:"@Url.Action("goods")",
+			3:"@Url.Action("order")",
+			4:"@Url.Action("reserve")",
+			5:"@Url.Action("discount")"
+		};
+	</script>
+</head>
+<body ontouchstart>
+	<div class="nt-loading" id="ntLoad"><span>0%</span></div>
+	<div class='page ui-panel-animation'>
+		<header data-module="header-nav"></header>
+		<div class="type-bar">
+			<div class='type-bar-bg'></div>
+			<div class='type-btn'>早餐</div>
+			<div class='type-btn'>运动餐</div>
+			<div class='type-btn'>肉</div>
+			<div class='type-btn'>水</div>
+			<div class='type-btn'>零食</div>
+		</div>
+		<div class='content' data-depth="0">
+			<div class='waterfall-container' id='waterfall'></div>
+		</div>
+		<div class="weui-loadmore">
+			<i class="weui-loading"></i>
+			<span class="weui-loadmore__tips">正在加载</span>
+		</div>
+	</div>
+	<div class="panel panel-swipe .weui-popup__container">
+		<div class="weui-cells">
+			<div class="weui-cell">
+				<div class="weui-cell__hd"><img src=""></div>
+				<div class="weui-cell__bd">
+					<p>会员卡</p>
+				</div>
+				<div class="weui-cell__ft"></div>
+			</div>
+			<div class="weui-cell">
+				<div class="weui-cell__hd"><img src=""></div>
+				<div class="weui-cell__bd">
+					<p>地址管理</p>
+				</div>
+				<div class="weui-cell__ft"></div>
+			</div>
+
+			<div class="weui-cell">
+				<div class="weui-cell__hd"><img src=""></div>
+				<div class="weui-cell__bd">
+					<p>我的收藏</p>
+				</div>
+				<div class="weui-cell__ft"></div>
+			</div>
+
+			<div class="weui-cell">
+				<div class="weui-cell__hd"><img src=""></div>
+				<div class="weui-cell__bd">
+					<p>积分兑换</p>
+				</div>
+				<div class="weui-cell__ft"></div>
+			</div>
+		</div>
+	</div>
+
+<!--<script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>-->
+<!--<script src="js/jquery.mobile-1.3.2.min.js"></script>-->
+<!--<script src="js/jquery-weui.min.js"></script>-->
+
+<script asp-src-include="js/public/*.min.js"></script>
+<script asp-src-include="js/front/nt.js"></script>
+<script>
+nt.page = 2;
+</script>
+<script asp-src-include="js/front/init.js"></script>
+</body>
+</html>

@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <title>弄堂 Brunch</title>
+    <meta charset="UTF-8">
+	<meta http-equiv="Cache" content="no-cache">
+    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black">
+	<link rel="stylesheet" href="css/weui.css?v=0.0.1">
+	<link rel="stylesheet" href="./css/jquery-weui.css">
+	<link rel="stylesheet" href="./css/font-awesome.min.css">
+	<link rel="stylesheet" href="css/main.css?v=0.0.1">
+</head>
+<body ontouchstart>
+<div class="page-group">
+	<div class='page page-current ui-panel-animation'>
+		<header class='bar bar-nav'>
+			<div class='nav-theme-light' id='barNavBG'>
+				<i class="fa fa-user-circle bar-ico" aria-hidden="true" id='userIco'></i>
+			</div>
+		</header>
+		<div class='parallax-panel' id='scene'>
+			<div class='parallax p-01' data-depth=".2"></div>
+			<div class='parallax p-02' data-depth=".9"></div>	
+			<div class='parallax p-03' data-depth=".4"></div>	
+		</div>
+		<div class='content' data-depth="0">
+			<div class='main-nav-panel'>
+				<div class='m-nav mn1' id='recommend'>
+					<i class="fa fa-star mn-ico" aria-hidden="true"></i>
+					<span class='mnf-01'>每日推荐</span>
+				</div>
+				<div class='m-nav mn2' id='goods'>
+					<i class="fa fa-shopping-basket mn-ico" aria-hidden="true"></i>
+					<span class='mnf-02'>货架</span>
+				</div>
+				<div class='m-nav mn3' id='order'>
+					<i class="fa fa-shopping-cart mn-ico" aria-hidden="true"></i>
+					<span class='mnf-03'>点餐</span>
+				</div>
+				<div class='m-nav mn4' id='reserve'>
+					<i class="fa fa-clock-o mn-ico" aria-hidden="true"></i>
+					<span class='mnf-04'>预订</span>
+				</div>
+				<div class='m-nav mn5' id='discount'>
+					<i class="fa fa-heartbeat mn-ico" aria-hidden="true"></i>
+					<span class='mnf-05'>优惠活动</span>
+				</div>
+			</div>	
+		</div>
+	</div>
+	<div class="panel panel-swipe .weui-popup__container">
+		<div class="weui-cells">
+			<div class="weui-cell">
+				<div class="weui-cell__hd"><img src=""></div>
+				<div class="weui-cell__bd">
+					<p>会员卡</p>
+				</div>
+				<div class="weui-cell__ft"></div>
+			</div>
+			<div class="weui-cell">
+				<div class="weui-cell__hd"><img src=""></div>
+				<div class="weui-cell__bd">
+					<p>地址管理</p>
+				</div>
+				<div class="weui-cell__ft"></div>
+			</div>
+
+			<div class="weui-cell">
+				<div class="weui-cell__hd"><img src=""></div>
+				<div class="weui-cell__bd">
+					<p>我的收藏</p>
+				</div>
+				<div class="weui-cell__ft"></div>
+			</div>
+
+			<div class="weui-cell">
+				<div class="weui-cell__hd"><img src=""></div>
+				<div class="weui-cell__bd">
+					<p>积分兑换</p>
+				</div>
+				<div class="weui-cell__ft"></div>
+			</div>
+		</div>
+	</div>
+	<div class="weui-footer weui-footer_fixed-bottom">
+		<p class="weui-footer__text">Copyright © 20018-2023 弄堂 Brunch</p>
+	</div>
+</div>
+<script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+<script src="js/jquery.mobile-1.3.2.min.js"></script>
+<script src="js/jquery-weui.min.js"></script>
+<script src="js/nt.js"></script>
+<script src="js/init.js"></script>
+</body>
+</html>

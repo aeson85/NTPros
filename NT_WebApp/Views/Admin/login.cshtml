@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <title>弄堂 Brunch 后台管理系统登录</title>
+    <meta charset="UTF-8">
+	<meta http-equiv="Cache" content="no-cache">
+    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black">
+	<!--
+	<link rel="stylesheet" asp-href-include="css/*.min.css" />
+	<link rel="stylesheet" asp-href-include="css/ntui.css" />
+	-->
+	<style>
+		body{margin:0;padding:0;background:#2d2d2d;font-family: "Helvetica Neue",Helvetica,sans-serif;color:#fefefe;font-size:12px;}
+		.login-panel{position:relative;width:300px;margin:200px auto;overflow:hidden;}
+		.login-title{font-size:24px;font-weight:bold;border-bottom:solid 3px #4c7f86;height:50px;line-height:50px;margin:30px 0;}
+		span{font-size: 16px;font-weight: bold;display: block;height: 30px;line-height: 30px;width: 50px;}
+		input{border:solid 1px #222;outline:none;width:200px;height:30px;line-height:30px;border-radius:3px;padding:0 15px;background:#aba9a9;}
+		button{border:solid 1px #222;outline:none;width:100px;height:30px;line-height:30px;border-radius:3px;padding:0 15px;background:#4c7f86;color:#fefefe;font-weight:bold;cursor:pointer;}
+		button:hover{background:#fefefe;color:#222;}
+
+	</style>
+</head>
+<body>
+<div class="login-panel">
+	<div class="login-title">弄堂Brunch后台管理系统</div>
+	<table cellspacing="8" cellpadding="1">
+		<tr>
+			<td><span>账号：</span></td>
+			<td><input type="text" id="adminName"/></td>
+		</tr>
+		<tr>
+			<td><span>密码：</span></td>
+			<td><input type="password" id="adminPwd"/></td>
+		</tr>
+		<tr>
+			<td></td>
+			<td><button>立即登录</button></td>
+		</tr>
+	</table>
+</div>
+<!--<script asp-src-include="js/public/*.min.js"></script>-->
+<!--<script asp-src-include="js/front/nt.js"></script>-->
+<!--<script asp-src-include="js/front/init.js"></script>-->
+</body>
+</html>

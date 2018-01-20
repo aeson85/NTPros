@@ -1,0 +1,7 @@
+[B|b]in/
+[O|o]bj/
+.vscode/
+.swp
+migrations/
+.svn/
+appsettings.json

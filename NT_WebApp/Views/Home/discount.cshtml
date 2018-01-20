@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<title>弄堂 Brunch - 优惠活动</title>
+<meta charset="UTF-8">
+<meta http-equiv="Cache" content="no-cache">
+<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<link rel="stylesheet" asp-href-include="css/*.min.css" />
+<link rel="stylesheet" asp-href-include="css/ntui.css" />
+	<script>
+		navMap ={
+			0:"@Url.Action("")",
+			1:"@Url.Action("rec")",
+			2:"@Url.Action("goods")",
+			3:"@Url.Action("order")",
+			4:"@Url.Action("reserve")",
+			5:"@Url.Action("discount")"
+		};
+	</script>
+</head>
+<body ontouchstart>
+<div class="nt-loading" id="ntLoad"><span>0%</span></div>
+<div class='page ui-panel-animation'>
+	<header data-module="header-nav"></header>
+	<div class='content' data-depth="0">
+		<div class="weui-flex">
+			<div class="weui-flex__item">
+				<div class='rec-item rec02'></div>
+			</div>
+		</div>
+		<div class="weui-flex">
+			<div class="weui-flex__item">
+				<div class="weui-media-box">
+					<h4 class="weui-media-box__title">火腿三明治套餐周一半价！(仅限会员)</h4>
+					<p class="weui-media-box__desc">招牌火腿三明治/豪华热狗(二选一)</p>
+					<p class="weui-media-box__desc">店长推荐香浓花生米浆（一杯/250ml）</p>
+					<p class="weui-media-box__desc" style="color:#ff8800;">赠早安果茶包为2018加油！！</p>
+					<span class="dis-price-right">￥16</span>
+				</div>
+			</div>
+		</div>
+		<div class="weui-flex">
+			<div class="weui-flex__item">
+				<span class="dis-price-left">￥12</span>
+				<div class="weui-media-box">
+					<h4 class="weui-media-box__title">NT招牌套餐,唤醒美好的一天</h4>
+					<h4 class="weui-media-box__desc">意式拿铁(大杯)</h4>
+					<p class="weui-media-box__desc">培根蛋堡</p>
+				</div>
+			</div>
+			<div class="weui-flex__item">
+				<div class='rec-item rec03'></div>
+			</div>
+		</div>
+
+		<div class="weui-flex">
+			<div class="weui-flex__item">
+				<div class='rec-item rec04'></div>
+			</div>
+			<div class="weui-flex__item">
+				<span class="dis-price-left">￥2</span>
+				<div class="weui-media-box">
+					<h4 class="weui-media-box__title">NT招牌套餐,唤醒美好的一天</h4>
+					<h4 class="weui-media-box__desc">意式拿铁(大杯)</h4>
+					<p class="weui-media-box__desc">培根蛋堡</p>
+				</div>
+			</div>
+		</div>
+
+		<div class="weui-flex">
+			<div class="weui-flex__item">
+				<span class="dis-price-left">￥12</span>
+				<div class="weui-media-box">
+					<h4 class="weui-media-box__title">NT招牌套餐,唤醒美好的一天</h4>
+					<h4 class="weui-media-box__desc">意式拿铁(大杯)</h4>
+					<p class="weui-media-box__desc">培根蛋堡</p>
+				</div>
+			</div>
+			<div class="weui-flex__item">
+				<div class='rec-item rec04'></div>
+			</div>
+		</div>
+		<div class="weui-flex">
+			<div class="weui-flex__item">
+				<div class="weui-media-box" style='background:#2d2c2c;'>
+					<h4 class="weui-media-box__title">周五驴友分享会,报名参加餐品全场8.5折(会员8折)</h4>
+					<p class="weui-media-box__desc">时间：</p>
+					<p class="weui-media-box__desc">地点：</p>
+					<p class="weui-media-box__desc">分享会入场须知：</p>
+					<p class="weui-media-box__desc">aaaaaaaaaaaaaaaaaaaa</p>
+					<p class="weui-media-box__desc">bbbbbbbbbbb</p>
+					<p class="weui-media-box__desc">ccccccccccccccccc</p>
+					<p class="weui-media-box__desc">ddddddddddddddddddddddddd</p>
+				</div>
+			</div>
+		</div>
+		<div class="weui-flex">
+			<div class="weui-flex__item">
+				<div class='rec-item rec05'></div>
+			</div>
+		</div>
+		<div class="weui-flex">
+			<div class="weui-flex__item">
+				<div class="weui-media-box">
+					<p class="weui-media-box__desc">一啪啦的介绍</p>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="weui-loadmore">
+		<i class="weui-loading"></i>
+		<span class="weui-loadmore__tips">正在加载</span>
+	</div>
+</div>
+</div>
+<div class="panel panel-swipe .weui-popup__container">
+<div class="weui-cells">
+	<div class="weui-cell">
+		<div class="weui-cell__hd"><img src=""></div>
+		<div class="weui-cell__bd">
+			<p>会员卡</p>
+		</div>
+		<div class="weui-cell__ft"></div>
+	</div>
+	<div class="weui-cell">
+		<div class="weui-cell__hd"><img src=""></div>
+		<div class="weui-cell__bd">
+			<p>地址管理</p>
+		</div>
+		<div class="weui-cell__ft"></div>
+	</div>
+
+	<div class="weui-cell">
+		<div class="weui-cell__hd"><img src=""></div>
+		<div class="weui-cell__bd">
+			<p>我的收藏</p>
+		</div>
+		<div class="weui-cell__ft"></div>
+	</div>
+
+	<div class="weui-cell">
+		<div class="weui-cell__hd"><img src=""></div>
+		<div class="weui-cell__bd">
+			<p>积分兑换</p>
+		</div>
+		<div class="weui-cell__ft"></div>
+	</div>
+
+	<div class="weui-cell">
+		<div class="weui-cell__hd"><img src=""></div>
+		<div class="weui-cell__bd">
+			<p>加盟合作</p>
+		</div>
+		<div class="weui-cell__ft"></div>
+	</div>
+</div>
+</div>
+
+<script asp-src-include="js/public/*.min.js"></script>
+<script asp-src-include="js/front/nt.js"></script>
+<script>
+nt.page = 5;
+</script>
+<script asp-src-include="js/front/init.js"></script>
+</body>
+</html>
