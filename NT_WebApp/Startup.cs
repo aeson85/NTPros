@@ -38,7 +38,7 @@ namespace NT_WebApp
         {
             services.AddDbContext<AppDbContext>(opts =>
             {
-                opts.UseMySQL(this.Configuration["Data.ConnectionString"]);
+                opts.UseMySQL(this.Configuration["Data:ConnectionString"]);
             });
             services.AddIdentity<AppUser, IdentityRole>().AddEntityFrameworkStores<AppDbContext>().AddDefaultTokenProviders();
 
