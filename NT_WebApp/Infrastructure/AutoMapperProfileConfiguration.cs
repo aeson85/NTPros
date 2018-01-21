@@ -4,12 +4,16 @@ using NT_WebApp.Models.ViewModels;
 using System.Linq;
 using System.Collections.Generic;
 using System;
+using Microsoft.Extensions.FileProviders.Physical;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.FileProviders;
+using Microsoft.AspNetCore.Mvc;
 
 namespace NT_WebApp.Infrastructure
 {
     public class AutoMapperProfileConfiguration : Profile
     {
-        public AutoMapperProfileConfiguration()
+        public AutoMapperProfileConfiguration(IConfiguration configuration)
         {
             this.CreateMap<ProductImageViewModel, NTImage>().ForAllMembers(p => p.Condition((s, d, sm, dm) => sm != null));
             this.CreateMap<NTImage, ProductImageViewModel>().ForAllMembers(p => p.Condition((s, d, sm, dm) => sm != null));;
@@ -75,7 +79,22 @@ namespace NT_WebApp.Infrastructure
                     }
                     return m;
                 });
-            }).ForAllMembers(p => p.Condition((s, d, sm, dm) => sm != null));;
+            }).ForAllMembers(p => p.Condition((s, d, sm, dm) => sm != null));
+
+            this.CreateMap<PhysicalDirectoryInfo, PhysicalDirectoryInfoViewModel>();
+            this.CreateMap<PhysicalFileInfo, PhysicalDirectoryInfoViewModel>();
+            this.CreateMap<IFileInfo, IPhysicalDirectoryInfoViewModel>().Include<PhysicalDirectoryInfo, PhysicalDirectoryInfoViewModel>().Include<PhysicalFileInfo, PhysicalDirectoryInfoViewModel>().ForMember(p => p.Url, opt => 
+            {
+                opt.ResolveUsing<string>((s, d, m) =>
+                {
+                    string url = null;
+                    if (!s.IsDirectory)
+                    {
+                        url = s.PhysicalPath.Replace(@"\","/").Replace(configuration["Ftp:RootPath"],"~" + configuration["Ftp:Prefix"]);
+                    }
+                    return url;
+                });
+            });
         }
     }
 }

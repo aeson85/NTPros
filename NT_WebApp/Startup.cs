@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.FileProviders;
 using NT_WebApp.Infrastructure;
 using NT_WebApp.Models;
 
@@ -21,18 +22,9 @@ namespace NT_WebApp
         // This method gets called by the runtime. Use this method to add services to the container.
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
 
-        public IConfigurationRoot Configuration { get; }
+        public IConfiguration Configuration { get; }
 
-        public Startup(IHostingEnvironment env)
-        {
-            var builder = new ConfigurationBuilder();
-            if (env.IsDevelopment())
-            {
-                builder.AddUserSecrets<Startup>();
-            }
-            builder.SetBasePath(Directory.GetCurrentDirectory()).AddJsonFile("appsettings.json");
-            this.Configuration = builder.Build();
-        }
+        public Startup(IConfiguration configuration) => this.Configuration = configuration;
 
         public void ConfigureServices(IServiceCollection services)
         {
@@ -52,7 +44,14 @@ namespace NT_WebApp
                 opt.User.RequireUniqueEmail = true;
             });
 
-            services.AddAutoMapper();
+            services.AddSingleton(provider => new MapperConfiguration(cfg =>
+            {
+                cfg.AddProfile(new AutoMapperProfileConfiguration(this.Configuration));
+            }).CreateMapper());
+
+            var physicalFileProvider = new PhysicalFileProvider(this.Configuration["Ftp:RootPath"]);
+            services.AddSingleton<IFileProvider>(physicalFileProvider);
+
             services.AddMvc();
         }
 
@@ -61,6 +60,12 @@ namespace NT_WebApp
         {
             app.UseDeveloperExceptionPage();
             app.UseStaticFiles();
+            app.UseStaticFiles(new StaticFileOptions()
+            {
+                FileProvider = app.ApplicationServices.GetRequiredService<IFileProvider>(),
+                RequestPath = this.Configuration["Ftp:Prefix"]
+            });
+            
             app.UseMvc(routes =>
             {
                 routes.MapRoute(

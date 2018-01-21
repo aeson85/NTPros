@@ -55,16 +55,6 @@ namespace NT_WebApp.Controllers
             return BadRequest();
         }
 
-        // [HttpGet]
-        // public IActionResult Get()
-        // {
-        //     var products = _context.Product.AsNoTracking().Include(p => p.Product_Image_Lst).ThenInclude(p => p.Image).Include(p => p.Product_Price).ThenInclude(p => p.Price).ToList();
-        //     var productModels = _mapper.Map<List<ProductCreateViewModel>>(products);
-        //     return Ok(productModels);
-        // }
-
-        
-
         [HttpGet]
         public IActionResult Get([FromQuery]ProductSearchViewModel model)
         {
