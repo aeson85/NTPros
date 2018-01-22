@@ -8,10 +8,12 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
+using NT_WebApp.Infrastructure.WeChat;
 using NT_WebApp.Infrastructure;
 using NT_WebApp.Models;
 
@@ -30,7 +32,7 @@ namespace NT_WebApp
         {
             services.AddDbContext<AppDbContext>(opts =>
             {
-                opts.UseMySQL(this.Configuration["Data:ConnectionString"]);
+                opts.UseMySQL(this.Configuration["Database:ConnectionString"]);
             });
             services.AddIdentity<AppUser, IdentityRole>().AddEntityFrameworkStores<AppDbContext>().AddDefaultTokenProviders();
 
@@ -52,7 +54,19 @@ namespace NT_WebApp
             var physicalFileProvider = new PhysicalFileProvider(this.Configuration["Ftp:RootPath"]);
             services.AddSingleton<IFileProvider>(physicalFileProvider);
 
-            services.AddMvc();
+            services.AddDistributedRedisCache(opt => 
+            {
+                opt.Configuration = this.Configuration["Redis:Host"];
+                opt.InstanceName = this.Configuration["Redis:InstanceName"];
+            });
+
+            services.AddScoped<WeChatUtilities>();
+
+            services.AddMvc(opt =>
+            {
+                opt.OutputFormatters.RemoveType<HttpNoContentOutputFormatter>();
+                opt.OutputFormatters.Add(new XmlSerializerOutputFormatter());
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
