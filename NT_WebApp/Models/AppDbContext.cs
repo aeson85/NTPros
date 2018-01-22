@@ -74,6 +74,8 @@ namespace NT_WebApp.Models
             builder.Entity<Product_Image>().HasKey(nameof(Product_Image.ProductId), nameof(Product_Image.ImageId));
 
             builder.Entity<Product>().HasMany(p => p.Product_Image_Lst).WithOne(p => p.Product).OnDelete(DeleteBehavior.Cascade);
+
+            builder.Entity<AppUser>().HasOne(p => p.WeChatInfo).WithOne(p => p.Owner).OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

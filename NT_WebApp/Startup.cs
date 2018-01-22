@@ -93,7 +93,7 @@ namespace NT_WebApp
                     template: "nt/{controller=admin}/{action=index}"
                 );
             });
-            AppDbContext.CreateAdminAccount(app.ApplicationServices, this.Configuration).Wait();
+            //AppDbContext.CreateAdminAccount(app.ApplicationServices, this.Configuration).Wait();
         }
     }
 }
