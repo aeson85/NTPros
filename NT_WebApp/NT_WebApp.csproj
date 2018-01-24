@@ -21,6 +21,12 @@
     <PackageReference Include="MySql.Data.EntityFrameworkCore" Version="6.10.5" />
     <DotNetCliToolReference Include="Microsoft.EntityFrameworkCore.Tools.DotNet" Version="2.0.1" />
     <DotNetCliToolReference Include="Microsoft.Extensions.SecretManager.Tools" Version="2.0.0" />
+    <PackageReference Include="newtonsoft.json" Version="10.0.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\NT_WeChatUtilities\NT_WeChatUtilities.csproj" />
+    <ProjectReference Include="..\NT_Common\NT_Common.csproj" />
   </ItemGroup>
 
 </Project>

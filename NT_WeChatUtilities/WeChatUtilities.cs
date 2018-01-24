@@ -7,9 +7,9 @@ using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using NT_WebApp.Infrastructure.Extensions;
+using NT_Common.Extensions;
 
-namespace NT_WebApp.Infrastructure.WeChat
+namespace NT_WeChatUtilities
 {
     public class WeChatUtilities
     {

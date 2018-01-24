@@ -1,7 +1,7 @@
 using System;
 using System.ComponentModel;
 
-namespace NT_WebApp.Infrastructure.Extensions
+namespace NT_Common.Extensions
 {
     public static class StringExtension
     {

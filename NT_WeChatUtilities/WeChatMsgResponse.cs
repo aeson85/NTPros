@@ -1,6 +1,6 @@
 using System.Runtime.Serialization;
 
-namespace NT_WebApp.Infrastructure.WeChat
+namespace NT_WeChatUtilities
 {
     [DataContract(Name="xml", Namespace="")]
     public class WeChatMsgResponse

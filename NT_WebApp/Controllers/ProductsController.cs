@@ -9,7 +9,7 @@ using NT_WebApp.Models.ViewModels;
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.Net;
-using NT_WebApp.Infrastructure.Extensions;
+using NT_Common.Extensions;
 using System.Linq.Expressions;
 
 namespace NT_WebApp.Controllers
@@ -36,7 +36,7 @@ namespace NT_WebApp.Controllers
                 await _context.SaveChangesAsync();
                 return new StatusCodeResult((int)HttpStatusCode.Created);
             }
-            return BadRequest();
+            return BadRequest(ModelState);
         }
 
         [HttpPut]

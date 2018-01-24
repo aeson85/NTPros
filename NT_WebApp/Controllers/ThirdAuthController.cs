@@ -5,7 +5,7 @@ using System.Xml.Linq;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Distributed;
-using NT_WebApp.Infrastructure.WeChat;
+using NT_WeChatUtilities;
 
 namespace NT_WebApp.Controllers
 {

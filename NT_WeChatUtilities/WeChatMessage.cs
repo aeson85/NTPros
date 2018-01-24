@@ -1,6 +1,6 @@
 using System.ComponentModel;
 
-namespace NT_WebApp.Infrastructure.WeChat
+namespace NT_WeChatUtilities
 {
     public enum WeChatMsgType
     {

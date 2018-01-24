@@ -1,6 +1,6 @@
 using System;
 
-namespace NT_WebApp.Infrastructure.WeChat
+namespace NT_WeChatUtilities
 {
     public class WeChatAccessToken
     {

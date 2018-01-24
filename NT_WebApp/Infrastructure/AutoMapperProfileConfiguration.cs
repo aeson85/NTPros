@@ -25,7 +25,7 @@ namespace NT_WebApp.Infrastructure
             this.CreateMap<NTPrice, ProductPriceViewModel>().ForAllMembers(p => p.Condition((s, d, sm, dm) => sm != null));;
             this.CreateMap<ProductCreateViewModel, Product>().ForMember(p => p.Product_Image_Lst, opt => 
             {
-                opt.ResolveUsing<List<Product_Image>>((s, d, m) => 
+                opt.ResolveUsing<List<Product_Image>>((s, d, m, c) => 
                 {
                     List<Product_Image> pro_img_lst = null;
                     if (s.Images?.Count() > 0)
@@ -35,7 +35,7 @@ namespace NT_WebApp.Infrastructure
                         {
                             var pro_img = m?.SingleOrDefault(p => p.Type == item.Type) ?? new Product_Image();
                             var img = pro_img.Image ?? new NTImage();
-                            pro_img.Image = Mapper.Map(item, img);
+                            pro_img.Image = c.Mapper.Map(item, img);
                             pro_img.Type = item.Type;
                             pro_img_lst.Add(pro_img);
                         }
@@ -44,14 +44,14 @@ namespace NT_WebApp.Infrastructure
                 });
             }).ForMember(p => p.Product_Price, opt =>
             {
-                opt.ResolveUsing<Product_Price>((s, d, m) =>
+                opt.ResolveUsing<Product_Price>((s, d, m, c) =>
                 {
                     Product_Price pro_price = null;
                     if (s.Prices != null)
                     {
                         pro_price = m != null ? m as Product_Price : new Product_Price();
                         var price = pro_price.Price ?? new NTPrice(); 
-                        pro_price.Price = Mapper.Map(s.Prices, price);
+                        pro_price.Price = c.Mapper.Map(s.Prices, price);
                     }
                     return pro_price;
                 });
@@ -59,14 +59,14 @@ namespace NT_WebApp.Infrastructure
 
             this.CreateMap<Product, ProductCreateViewModel>().ForMember(p => p.Images, opt => 
             {
-                opt.ResolveUsing<List<ProductImageViewModel>>((s, d, m) => 
+                opt.ResolveUsing<List<ProductImageViewModel>>((s, d, m, c) => 
                 {
                     if (s.Product_Image_Lst?.Count() > 0)
                     {
                         m = new List<ProductImageViewModel>();
                         foreach (var item in s.Product_Image_Lst)
                         {
-                            var imgModel = Mapper.Map<ProductImageViewModel>(item.Image);
+                            var imgModel = c.Mapper.Map<ProductImageViewModel>(item.Image);
                             imgModel.Type = item.Type;
                             m.Add(imgModel);
                         } 
@@ -75,11 +75,11 @@ namespace NT_WebApp.Infrastructure
                 });
             }).ForMember(p => p.Prices, opt => 
             {
-                opt.ResolveUsing<ProductPriceViewModel>((s, d, m) => 
+                opt.ResolveUsing<ProductPriceViewModel>((s, d, m, c) => 
                 {
                     if (s.Product_Price != null)
                     {
-                        m = Mapper.Map<ProductPriceViewModel>(s.Product_Price.Price);
+                        m = c.Mapper.Map<ProductPriceViewModel>(s.Product_Price.Price);
                     }
                     return m;
                 });
@@ -89,7 +89,7 @@ namespace NT_WebApp.Infrastructure
             this.CreateMap<PhysicalFileInfo, PhysicalDirectoryInfoViewModel>();
             this.CreateMap<IFileInfo, IPhysicalDirectoryInfoViewModel>().Include<PhysicalDirectoryInfo, PhysicalDirectoryInfoViewModel>().Include<PhysicalFileInfo, PhysicalDirectoryInfoViewModel>().ForMember(p => p.Url, opt => 
             {
-                opt.ResolveUsing<string>((s, d, m) =>
+                opt.ResolveUsing<string>((s, d, m, c) =>
                 {
                     string url = null;
                     if (!s.IsDirectory)

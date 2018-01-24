@@ -107,8 +107,8 @@
 		}
 
 		this.initMenuTree = function(){
-			$.get("http://47.104.84.30/api/ftp/",null,function(data){
-			//$.get("~/api/ftp/",null,function(data){
+			//$.get("http://47.104.84.30/api/ftp/",null,function(data){
+			$.get("/api/ftp/",null,function(data){
 				var container = $("#menuTree")[0];
 				var tree = [];
 				for(var i in menuMap){
@@ -141,8 +141,8 @@
 
 			var container = $("#imgsPage")[0];
 			container.innerHTML = '';
-			$.get("http://47.104.84.30/api/ftp/"+this.dataset.name,null,function(data){
-			//$.get("~/api/ftp/"+this.dataset.name,null,function(data){
+			//$.get("http://47.104.84.30/api/ftp/"+this.dataset.name,null,function(data){
+			$.get("/api/ftp/"+this.dataset.name,null,function(data){
 				$(data).each(function(i){
 					var viewBox = admin.widget.createDom("div:img-view-box",null,container);
 					var view = admin.widget.createDom("div:img-view",null,viewBox);
@@ -150,10 +150,10 @@
 					name.innerHTML = this.name;
 
 					var imgUrl = admin.widget.createDom("div:img-view-url",null,viewBox);
-
-					var url = "http://47.104.84.30"+this.url.split("~")[1];
+					var url = this.url;
+					//imgUrl.innerHTML = admin.widget.subString(url,18); 
+					//var url = "http://47.104.84.30"+this.url;
 					imgUrl.innerHTML = admin.widget.subString(url,18); 
-					//imgUrl.innerHTML = admin.widget.subString(this.url,18); 
 
 					var ico = admin.widget.createDom("i:fa fa-clone",null,imgUrl);
 					$(ico).attr("aria-hidden","true");
@@ -347,10 +347,11 @@
 				submit:function(){
 					$.ajax({
 						type:'post',
-						url:"http://47.104.84.30/api/products",
-						//url:"~/api/products",
+						//url:"http://47.104.84.30/api/products",
+						url:"/api/products",
+						datatype:'json',
 						data:self.TmpData,
-						contentType:"application/json; charset=utf-8",
+						contentType:"application/json; charset=UTF-8",
 						success:function(data){
 							console.log(data);
 						},
@@ -358,8 +359,8 @@
 							console.log(msg);
 						}
 					})
-					//console.log(self.TmpData);
-					//$.post("http://47.104.84.30/api/products",self.TmpData,function(data){
+					console.log(self.TmpData);
+					//$.post("/api/products",self.TmpData,function(data){
 					//});
 				},
 				setForm:function(){

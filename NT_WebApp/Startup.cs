@@ -13,7 +13,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
-using NT_WebApp.Infrastructure.WeChat;
+using NT_WeChatUtilities;
 using NT_WebApp.Infrastructure;
 using NT_WebApp.Models;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
@@ -67,12 +67,7 @@ namespace NT_WebApp
                 cfg.AddProfile(new AutoMapperProfileConfiguration(this.Configuration));
             }).CreateMapper());
 
-            services.AddMvc(opt =>
-            {
-                opt.OutputFormatters.RemoveType<HttpNoContentOutputFormatter>();
-                opt.OutputFormatters.Add(new XmlSerializerOutputFormatter());
-            });
-
+            services.AddMvc();
             services.AddCors();
         }
 
@@ -87,7 +82,7 @@ namespace NT_WebApp
                 RequestPath = this.Configuration["Ftp:Prefix"]
             });
 
-            app.UseCors(builder => builder.WithOrigins("http://localhost"));
+            app.UseCors(builder => builder.WithOrigins("http://localhost").AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin());
             
             app.UseMvc(routes =>
             {
