@@ -8,6 +8,10 @@ using Microsoft.Extensions.FileProviders.Physical;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Routing;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
 
 namespace NT_WebApp.Infrastructure
 {
@@ -90,7 +94,7 @@ namespace NT_WebApp.Infrastructure
                     string url = null;
                     if (!s.IsDirectory)
                     {
-                        url = s.PhysicalPath.Replace(@"\","/").Replace(configuration["Ftp:RootPath"],"~" + configuration["Ftp:Prefix"]);
+                        url = s.PhysicalPath.Replace(@"\","/").Replace(configuration["Ftp:RootPath"], configuration["Ftp:Prefix"]);
                     }
                     return url;
                 });

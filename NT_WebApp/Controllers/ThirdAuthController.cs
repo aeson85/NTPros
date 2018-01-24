@@ -21,37 +21,22 @@ namespace NT_WebApp.Controllers
         }
 
         //[Produces("text/xml")]
-        public IActionResult WechatCallback(string signature, string timestamp, string nonce, string echostr)
+        public async Task<IActionResult> WechatCallback(string signature, string timestamp, string nonce, string echostr)
         {
             var responseText = echostr;
             if (this.Request.Method.Equals("post", StringComparison.OrdinalIgnoreCase))
             {
-                var xDoc = XDocument.Load(this.Request.Body);
-                var root = xDoc.Element("xml");
-                var toUserName = root.Element("ToUserName")?.Value;
-                var fromUserName = root.Element("FromUserName")?.Value;
-                var createTime = root.Element("CreateTime")?.Value;
-                var msgType = root.Element("MsgType")?.Value;
-                var content = root.Element("Content")?.Value;
-                var msgId = root.Element("MsgId")?.Value;
-                var responseTime = DateTimeOffset.Now.ToUnixTimeSeconds();
-                responseText = $"<xml><ToUserName><![CDATA[{fromUserName}]]></ToUserName><FromUserName>< ![CDATA[{toUserName}]]></FromUserName> <CreateTime>{responseTime.ToString()}</CreateTime> <MsgType><![CDATA[text]]></MsgType><Content>< ![CDATA[老B,敢不敢来喝两杯!!]]></Content></xml>";
-                return new ContentResult {
-                    Content = responseText,
-                    ContentType = "application/xml",
-                    StatusCode = 200
-                };
-                // return new WeChatMsgResponse
-                // {
-                //     ToUserName = fromUserName,
-                //     FromUserName = toUserName,
-                //     CreateTime = DateTimeOffset.Now.ToUnixTimeSeconds(),
-                //     MsgType = "text",
-                //     Content = "老B,敢不敢来喝两杯!!"
-                // };
-                //return responseText;
+                var weChatMsg = _weChatUtilities.Parse(this.Request.Body);
+                if (weChatMsg.MsgType == WeChatMsgType.Event)
+                {
+                    await _weChatUtilities.GetUserInfo(weChatMsg.FromUserName);
+                }
             }
-            return Content(responseText, "application/plain");
+            else if (this.Request.Method.Equals("get", StringComparison.OrdinalIgnoreCase))
+            {
+                return Content(echostr, "application/plain");
+            }
+            return NotFound();
         }
 
         [HttpGet]

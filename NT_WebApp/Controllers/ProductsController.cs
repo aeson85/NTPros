@@ -9,7 +9,7 @@ using NT_WebApp.Models.ViewModels;
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.Net;
-using Infrastructure.Extensions;
+using NT_WebApp.Infrastructure.Extensions;
 using System.Linq.Expressions;
 
 namespace NT_WebApp.Controllers

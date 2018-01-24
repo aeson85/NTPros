@@ -7,10 +7,10 @@
     <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">
 	<meta name="apple-mobile-web-app-capable" content="yes">
 	<meta name="apple-mobile-web-app-status-bar-style" content="black">
-	<link rel="stylesheet" asp-href-include="css/font-awesome.min.css" />
-	<link rel="stylesheet" asp-href-include="css/medium-editor.css" />
-	<link rel="stylesheet" asp-href-include="css/default.min.css" />
-	<link rel="stylesheet" asp-href-include="css/admin.css" />
+	<link rel="stylesheet" href="../../css/font-awesome.min.css" />
+	<link rel="stylesheet" href="../../css/medium-editor.css" />
+	<link rel="stylesheet" href="../../css/default.min.css" />
+	<link rel="stylesheet" href="../../css/admin.css" />
 </head>
 <body>
 <div class="container">
@@ -173,9 +173,69 @@
 	</div>
 
 </div>
-<script asp-src-include="js/public/jquery-2.1.0.min.js"></script>
-<script asp-src-include="js/medium-editor.js"></script>
-<script asp-src-include="js/back/admin.js"></script>
+<script src="../../js/public/jquery-2.1.0.min.js"></script>
+<script src="../../js/medium-editor.js"></script>
+<script src="../../js/back/admin.js"></script>
+<!--<script>-->
+<!--var registSimpleEditor = function(dom,txt){-->
+	<!--var editor = new MediumEditor(dom, {-->
+	<!--buttonLabels: 'fontawesome',-->
+	<!--autoLink: true,-->
+	<!--toolbar: {-->
+	<!--//buttons: ['bold', 'italic','underline', 'strikethrough','unorderedlist', 'orderedlist', 'h1','h2','h3','anchor','quote','pre','subscript','superscript','removeFormat']-->
+	<!--buttons: ['bold', 'italic','underline', 'strikethrough','unorderedlist', 'orderedlist', 'h1','h2','h3','anchor','removeFormat']-->
+	<!--},placeholder: {-->
+	<!--text: txt?txt:'说点什么...',-->
+	<!--hideOnClick: true-->
+	<!--}-->
+	<!--});-->
+<!--}-->
+
+<!--var getWClientHeight = function(){-->
+	<!--if(document.compatMode == 'BackCompat'){-->
+		<!--return document.body.clientHeight;-->
+	<!--}-->
+	<!--if(document.compatMode == 'CSS1Compat'){-->
+		<!--return document.documentElement.clientHeight;-->
+	<!--}-->
+<!--}-->
+
+
+
+<!--$(document).ready(function(){-->
+		<!--$(".panel").css("height",getWClientHeight());-->
+		<!--$(".g-info-panel").css("height",getWClientHeight()-75);-->
+
+		<!--$(".tool-btn i").click(function(){-->
+			<!--$(".ctl-panel").hide();-->
+			<!--$("#"+this.dataset.flag+"Panel").show();-->
+			<!--$(".tool-btn i").removeClass("b-on").addClass("b-off");-->
+			<!--$(this).removeClass("b-off").addClass("b-on");-->
+			<!--});-->
+		<!--$(".b-on").click();-->
+		<!--registSimpleEditor($('#desc'));-->
+
+
+		<!--/*-->
+		<!--$.get("http://47.104.84.30/api/ftp/OrderIMG",null,function(data){-->
+			<!--console.log(data);-->
+			
+		<!--})-->
+		<!--*/-->
+		<!--//var editor = new MediumEditor('.editable');-->
+		  <!--//var editor = new MediumEditor('.editable');-->
+		  <!--/*-->
+            <!--editor2 = new MediumEditor('.secondEditable', {-->
+                <!--toolbar: {-->
+                    <!--buttons: ['bold', 'italic', 'quote', 'pre']-->
+                <!--}-->
+            <!--});-->
+		<!--*/	-->
+		<!--});-->
+<!--</script>-->
+<!--<script asp-src-include="js/public/*.min.js"></script>-->
+<!--<script asp-src-include="js/front/nt.js"></script>-->
+<!--<script asp-src-include="js/front/init.js"></script>-->
 </body>
 </html>
 

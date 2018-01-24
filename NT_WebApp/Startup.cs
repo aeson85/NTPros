@@ -16,6 +16,9 @@ using Microsoft.Extensions.FileProviders;
 using NT_WebApp.Infrastructure.WeChat;
 using NT_WebApp.Infrastructure;
 using NT_WebApp.Models;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
+using Microsoft.AspNetCore.Mvc.Routing;
+using AspNetCore.IServiceCollection.AddIUrlHelper;
 
 namespace NT_WebApp
 {
@@ -46,11 +49,6 @@ namespace NT_WebApp
                 opt.User.RequireUniqueEmail = true;
             });
 
-            services.AddSingleton(provider => new MapperConfiguration(cfg =>
-            {
-                cfg.AddProfile(new AutoMapperProfileConfiguration(this.Configuration));
-            }).CreateMapper());
-
             var physicalFileProvider = new PhysicalFileProvider(this.Configuration["Ftp:RootPath"]);
             services.AddSingleton<IFileProvider>(physicalFileProvider);
 
@@ -60,13 +58,22 @@ namespace NT_WebApp
                 opt.InstanceName = this.Configuration["Redis:InstanceName"];
             });
 
+            services.AddSingleton<WeChatApiUrls>();
             services.AddScoped<WeChatUtilities>();
+            services.AddUrlHelper();
+        
+            services.AddSingleton(provider => new MapperConfiguration(cfg =>
+            {
+                cfg.AddProfile(new AutoMapperProfileConfiguration(this.Configuration));
+            }).CreateMapper());
 
             services.AddMvc(opt =>
             {
                 opt.OutputFormatters.RemoveType<HttpNoContentOutputFormatter>();
                 opt.OutputFormatters.Add(new XmlSerializerOutputFormatter());
             });
+
+            services.AddCors();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -79,6 +86,8 @@ namespace NT_WebApp
                 FileProvider = app.ApplicationServices.GetRequiredService<IFileProvider>(),
                 RequestPath = this.Configuration["Ftp:Prefix"]
             });
+
+            app.UseCors(builder => builder.WithOrigins("http://localhost"));
             
             app.UseMvc(routes =>
             {
