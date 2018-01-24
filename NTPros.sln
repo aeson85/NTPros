@@ -7,7 +7,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NT_WebApp", "NT_WebApp\NT_W
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NT_Test", "NT_Test\NT_Test.csproj", "{B2A30C7C-FC16-4ED0-B516-E59C2DFB75EB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NT_WeChatMQConsumer", "NT_WeChatMQConsumer\NT_WeChatMQConsumer.csproj", "{0B91B7C2-465C-4651-BEC0-56E6B4A62723}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NT_MQConsumer", "NT_MQConsumer\NT_MQConsumer.csproj", "{0B91B7C2-465C-4651-BEC0-56E6B4A62723}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NT_WeChatUtilities", "NT_WeChatUtilities\NT_WeChatUtilities.csproj", "{7AED4259-A548-487A-8CF3-046F37E04F5E}"
 EndProject
