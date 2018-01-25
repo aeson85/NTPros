@@ -2,18 +2,15 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Reflection;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.AspNetCore.Server.Kestrel.Core;
-using Microsoft.AspNetCore.Server.Kestrel.Core.Internal;
 
-namespace NT_WebApp
+namespace NT_MQPublisher
 {
     public class Program
     {
@@ -61,12 +58,8 @@ namespace NT_WebApp
             {
                 options.ValidateScopes = context.HostingEnvironment.IsDevelopment();
             })
-            .ConfigureServices(services =>
-            {
-                services.AddTransient<IConfigureOptions<KestrelServerOptions>, KestrelServerOptionsSetup>();
-            })
             .UseStartup<Startup>()
-            .UseUrls("http://localhost:5000")
+            .UseUrls("http://localhost:5001")
             .Build();
         }
     }

@@ -1,0 +1,10 @@
+{
+    "RabbitMQ": {
+        "HostName": "localhost",
+        "Port": 5672,
+        "ExchangeName": "nt_topic_exchange",
+        "Wechat": {
+            "QueueName": "wechat_queue"
+        }
+    }
+}

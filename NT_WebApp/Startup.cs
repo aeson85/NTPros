@@ -59,7 +59,7 @@ namespace NT_WebApp
             });
 
             services.AddSingleton<WeChatApiUrls>();
-            services.AddScoped<WeChatUtilities>();
+            services.AddSingleton<WeChatUtilities>();
             services.AddUrlHelper();
         
             services.AddSingleton(provider => new MapperConfiguration(cfg =>
@@ -67,6 +67,18 @@ namespace NT_WebApp
                 cfg.AddProfile(new AutoMapperProfileConfiguration(this.Configuration));
             }).CreateMapper());
 
+            services.AddSingleton(factory => 
+            {
+                Func<string, MessageDelivery> accessor = key => 
+                {
+                    switch (key)
+                    {
+                        case "wechat": return new WeChatMessageDelivery(this.Configuration, factory.GetRequiredService<WeChatUtilities>());
+                        default: return null;
+                    }
+                };
+                return accessor;
+            });
             services.AddMvc();
             services.AddCors();
         }
