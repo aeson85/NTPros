@@ -12,6 +12,7 @@ namespace NT_WebApp.Infrastructure
 {
     public abstract class MessageDelivery
     {
+        private static HttpClient client = new HttpClient();
         private readonly IConfiguration _configuration;
 
         protected abstract string QueueName { get; }
@@ -27,16 +28,13 @@ namespace NT_WebApp.Infrastructure
             return url;
         }
 
-        public void Publish(Stream stream)
+        public void Publish(object message)
         {
             var url = this.GetPublishServerUrl();
-            using (var client = new HttpClient())
-            {
-                var body = this.Process(stream);
-                var a = client.PostAsJsonAsync(url, body).Result;
-            }
+            //var client = new HttpClient();
+            client.PostAsJsonAsync(url, message);
         }
 
-        protected abstract object Process(Stream stream);
+        public abstract T GetMessage<T>(Stream stream) where T : class;
     }
 }

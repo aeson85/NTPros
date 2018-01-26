@@ -13,35 +13,28 @@ namespace NT_WebApp.Controllers
 {
     public class ThirdAuthController : Controller
     {
-        private readonly IDistributedCache _distributedCache;
         private readonly Func<string, MessageDelivery> _deliverServiceAccessor;
 
-        public ThirdAuthController(IDistributedCache distributedCache, Func<string, MessageDelivery> deliverServiceAccessor)
-        {
-            _distributedCache = distributedCache;
-            _deliverServiceAccessor = deliverServiceAccessor;
-        }
+        public ThirdAuthController(Func<string, MessageDelivery> deliverServiceAccessor) => _deliverServiceAccessor = deliverServiceAccessor;
 
-        //[Produces("text/xml")]
-        public IActionResult WechatCallback(string signature, string timestamp, string nonce, string echostr)
+        public void WeChatCallback(string signature, string timestamp, string nonce, string echostr)
         {
             var responseText = echostr;
+            var contentType = "text/plain";
             if (this.Request.Method.Equals("post", StringComparison.OrdinalIgnoreCase))
             {
-                _deliverServiceAccessor("wechat").Publish(this.Request.Body);
-                //_deliverServiceAccessor("wechat").Deliver();
-                //var weChatMsg = _weChatUtilities.Parse(this.Request.Body);
-                //_messageDelivery.Deliver(weChatMsg);
-                // if (weChatMsg.MsgType == WeChatMsgType.Event)
-                // {
-                //     await _weChatUtilities.GetUserInfo(weChatMsg.FromUserName);
-                // }
+                var deliverHandler = _deliverServiceAccessor("wechat");
+                var weChatMsg = deliverHandler.GetMessage<WeChatMessage>(this.Request.Body);
+                deliverHandler.Publish(weChatMsg);
+                responseText = $"<xml><ToUserName><![CDATA[{weChatMsg.FromUserName}]]></ToUserName><FromUserName><![CDATA[{weChatMsg.ToUserName}]]></FromUserName><CreateTime>{weChatMsg.CreateTime}</CreateTime> <MsgType><![CDATA[text]]></MsgType><Content><![CDATA[你好,欢迎来到老B之家！！！]]></Content> </xml>";
+                contentType = "application/xml";
             }
             else if (this.Request.Method.Equals("get", StringComparison.OrdinalIgnoreCase))
             {
-                return Content(echostr, "application/plain");
+                this.Response.ContentType = "application/xml";
             }
-            return NotFound();
+            this.Response.ContentType = contentType;
+            this.Response.WriteAsync(responseText);
         }
 
         [HttpGet]

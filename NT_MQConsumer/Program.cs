@@ -7,6 +7,10 @@ using RabbitMQ.Client.Events;
 using System.Linq;
 using System.IO;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using NT_Common;
+using NT_WeChatUtilities;
 
 namespace NT_WeChatMQConsumer
 {
@@ -14,11 +18,12 @@ namespace NT_WeChatMQConsumer
     {
         static void Main(string[] args)
         {
-            var config = GetConfiguration();
+            var serviceProvider = InitialServiceProvider();
 
+            var config = serviceProvider.GetRequiredService<IConfiguration>();
             var consumerConfigurations = new List<IConsumerHandler>
             {
-                new WeChatConsumerHandler(config),
+                new WeChatConsumerHandler(config, serviceProvider.GetRequiredService<WeChatUtilities>()),
             };
 
             var factory = new ConnectionFactory
@@ -42,10 +47,8 @@ namespace NT_WeChatMQConsumer
                     consumer.Received += (moel, ea) =>
                     {
                         var message = Encoding.UTF8.GetString(ea.Body);
-                        Console.WriteLine($"New Message : {message}" );
                         handler.Execute(message);
                         channel.BasicAck(deliveryTag: ea.DeliveryTag, multiple: false);
-                        Console.WriteLine($"Send Ack");
                     };
                     channel.BasicConsume(queue: handler.QueueName, autoAck: false, consumer: consumer);
                 }
@@ -53,10 +56,20 @@ namespace NT_WeChatMQConsumer
                 Console.ReadLine();
             }
         }
-
         private static IConfiguration GetConfiguration()
         {
             return new ConfigurationBuilder().AddJsonFile(Path.GetFullPath(Path.Combine(@"../NT_Common/globalSettings.json")), optional: true, reloadOnChange: true).SetBasePath(Directory.GetCurrentDirectory()).AddJsonFile("appsettings.json", optional: true, reloadOnChange: true).Build();
+        }
+
+        private static IServiceProvider InitialServiceProvider()
+        {
+            var configuration = GetConfiguration();
+            var serviceCollection = new ServiceCollection();
+            serviceCollection.AddLogging();
+            serviceCollection.AddSingleton<IConfiguration>(configuration);
+            serviceCollection.AddSingleton<WeChatApiUrls>();
+            serviceCollection.AddSingleton<WeChatUtilities>();
+            return serviceCollection.BuildServiceProvider();
         }
     }
 }

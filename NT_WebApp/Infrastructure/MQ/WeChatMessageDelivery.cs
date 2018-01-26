@@ -13,10 +13,10 @@ namespace NT_WebApp.Infrastructure
 
         public WeChatMessageDelivery(IConfiguration configuration, WeChatUtilities weChatUtilities) : base(configuration) => _weChatUtilities = weChatUtilities;
 
-        protected override object Process(Stream stream)
+        public override T GetMessage<T>(Stream stream)
         {
-            var weChatMsg = _weChatUtilities.Parse(stream);
-            return weChatMsg;
+            var wechatMsg = _weChatUtilities.Parse(stream);
+            return wechatMsg as T;
         }
     }
 }

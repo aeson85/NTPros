@@ -53,8 +53,8 @@ namespace NT_WebApp
             .ConfigureLogging((hostingContext, logging) => 
             {
                 logging.AddConfiguration(hostingContext.Configuration.GetSection("Logging"));
-                logging.AddConsole();
-                logging.AddDebug();
+                //logging.AddConsole();
+                //logging.AddDebug();
             })
             .UseIISIntegration()
             .UseDefaultServiceProvider((context, options) => 

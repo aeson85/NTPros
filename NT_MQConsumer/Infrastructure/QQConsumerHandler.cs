@@ -1,4 +1,6 @@
 using System;
+using Newtonsoft.Json;
+using NT_WeChatUtilities;
 using RabbitMQ.Client;
 
 namespace NT_MQConsumer.Infrastructure

@@ -1,5 +1,6 @@
 using System;
 using System.ComponentModel;
+using System.Runtime.Serialization;
 
 namespace NT_Common.Extensions
 {
@@ -14,9 +15,9 @@ namespace NT_Common.Extensions
             }
             foreach(var field in type.GetFields())
             {
-                if (Attribute.GetCustomAttribute(field, typeof(DescriptionAttribute)) is DescriptionAttribute attribute)
+                if (Attribute.GetCustomAttribute(field, typeof(EnumMemberAttribute)) is EnumMemberAttribute attribute)
                 {
-                    if(attribute.Description?.Equals(selfStr, StringComparison.OrdinalIgnoreCase) ?? false)
+                    if(attribute.Value?.Equals(selfStr, StringComparison.OrdinalIgnoreCase) ?? false)
                     {
                         return (T)field.GetValue(null);
                     }

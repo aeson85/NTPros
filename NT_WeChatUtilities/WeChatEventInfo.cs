@@ -1,13 +1,20 @@
 using System.ComponentModel;
+using System.Runtime.Serialization;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 
 namespace NT_WeChatUtilities
 {
+    [JsonConverter(typeof(StringEnumConverter))]
     public enum WeChatEventType
     {
-        [Description("subscribe")]
+        [EnumMember(Value = "none")]
+        None,
+
+        [EnumMember(Value = "subscribe")]
         Subscribe,
 
-        [Description("unsubscribe")]
+        [EnumMember(Value = "unsubscribe")]
         UnSubscribe
     }
     

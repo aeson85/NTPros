@@ -27,15 +27,15 @@ namespace NT_WebApp
         // This method gets called by the runtime. Use this method to add services to the container.
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
 
-        public IConfiguration Configuration { get; }
+        public readonly IConfiguration _configuration;
 
-        public Startup(IConfiguration configuration) => this.Configuration = configuration;
+        public Startup(IConfiguration configuration) => _configuration = configuration;
 
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<AppDbContext>(opts =>
             {
-                opts.UseMySQL(this.Configuration["Database:ConnectionString"]);
+                opts.UseMySQL(_configuration["Database:ConnectionString"]);
             });
             services.AddIdentity<AppUser, IdentityRole>().AddEntityFrameworkStores<AppDbContext>().AddDefaultTokenProviders();
 
@@ -49,14 +49,14 @@ namespace NT_WebApp
                 opt.User.RequireUniqueEmail = true;
             });
 
-            var physicalFileProvider = new PhysicalFileProvider(this.Configuration["Ftp:RootPath"]);
+            var physicalFileProvider = new PhysicalFileProvider(_configuration["Ftp:RootPath"]);
             services.AddSingleton<IFileProvider>(physicalFileProvider);
 
-            services.AddDistributedRedisCache(opt => 
-            {
-                opt.Configuration = this.Configuration["Redis:Host"];
-                opt.InstanceName = this.Configuration["Redis:InstanceName"];
-            });
+            // services.AddDistributedRedisCache(opt => 
+            // {
+            //     opt.Configuration = this.Configuration["Redis:Host"];
+            //     opt.InstanceName = this.Configuration["Redis:InstanceName"];
+            // });
 
             services.AddSingleton<WeChatApiUrls>();
             services.AddSingleton<WeChatUtilities>();
@@ -64,7 +64,7 @@ namespace NT_WebApp
         
             services.AddSingleton(provider => new MapperConfiguration(cfg =>
             {
-                cfg.AddProfile(new AutoMapperProfileConfiguration(this.Configuration));
+                cfg.AddProfile(new AutoMapperProfileConfiguration(_configuration));
             }).CreateMapper());
 
             services.AddSingleton(factory => 
@@ -73,12 +73,13 @@ namespace NT_WebApp
                 {
                     switch (key)
                     {
-                        case "wechat": return new WeChatMessageDelivery(this.Configuration, factory.GetRequiredService<WeChatUtilities>());
+                        case "wechat": return new WeChatMessageDelivery(_configuration, factory.GetRequiredService<WeChatUtilities>());
                         default: return null;
                     }
                 };
                 return accessor;
             });
+
             services.AddMvc();
             services.AddCors();
         }
@@ -91,7 +92,7 @@ namespace NT_WebApp
             app.UseStaticFiles(new StaticFileOptions()
             {
                 FileProvider = app.ApplicationServices.GetRequiredService<IFileProvider>(),
-                RequestPath = this.Configuration["Ftp:Prefix"]
+                RequestPath = _configuration["Ftp:Prefix"]
             });
 
             app.UseCors(builder => builder.WithOrigins("http://localhost").AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin());

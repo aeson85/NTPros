@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Net;
 using System.Reflection;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore;
@@ -10,7 +9,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 
-namespace NT_MQPublisher
+namespace NT_Cache
 {
     public class Program
     {
@@ -59,7 +58,7 @@ namespace NT_MQPublisher
                 options.ValidateScopes = context.HostingEnvironment.IsDevelopment();
             })
             .UseStartup<Startup>()
-            .UseUrls("http://localhost:5001")
+            .UseUrls("http://localhost:5002")
             .Build();
         }
     }

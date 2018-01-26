@@ -36,10 +36,7 @@ namespace NT_Test
             var msgType = GetValueFrom(root, "MsgType");
             var content = GetValueFrom(root, "Content");
             var msgId = GetValueFrom(root, "MsgId");
-
-            var b = @"<xml> <ToUserName>< ![CDATA[toUser] ]></ToUserName> <FromUserName>< ![CDATA[fromUser] ]></FromUserName> <CreateTime>12345678</CreateTime> <MsgType>< ![CDATA[text] ]></MsgType> <Content>< ![CDATA[你好] ]></Content> </xml>";
         }
-
         private static string GetValueFrom(XElement root, string eleName)
         {
             return root.Element(eleName)?.Value;

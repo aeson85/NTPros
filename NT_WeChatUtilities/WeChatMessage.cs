@@ -1,13 +1,20 @@
 using System.ComponentModel;
+using System.Runtime.Serialization;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 
 namespace NT_WeChatUtilities
 {
+    [JsonConverter(typeof(StringEnumConverter))]
     public enum WeChatMsgType
     {
-        [Description("text")]
+        [EnumMember(Value = "none")]
+        None,
+        
+        [EnumMember(Value = "text")]
         Text,
 
-        [Description("event")]
+        [EnumMember(Value = "event")]
         Event,
     }
     

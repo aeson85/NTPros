@@ -3,7 +3,6 @@ using System.IO;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Xml.Linq;
-using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -13,17 +12,24 @@ namespace NT_WeChatUtilities
 {
     public class WeChatUtilities
     {
-        private readonly IDistributedCache _distributedCache;
         private readonly WeChatApiUrls _weChatApiUrls;
-        
-        private async void Get(string url, Action<JObject> action = null)
+        private readonly IConfiguration _congiguration;
+        private readonly string _url;
+
+        private static HttpClient client = new HttpClient();
+
+        public WeChatUtilities(WeChatApiUrls weChatApiUrls, IConfiguration congiguration)
+        {
+            _weChatApiUrls = weChatApiUrls;
+            _congiguration = congiguration;
+            _url = _congiguration["CacheServer:Url"];
+        }
+
+        private async Task GetFromWechatServer(string url, Action<JObject> action = null)
         {
             var responseText = string.Empty;
-            using (var client = new HttpClient())
-            {
-                var response = await client.GetAsync(url);
-                responseText = await response.Content.ReadAsStringAsync();
-            }
+            var response = await client.GetAsync(url);
+            responseText = await response.Content.ReadAsStringAsync();
             if (!string.IsNullOrEmpty(responseText))
             {
                 var jObject = JObject.Parse(responseText);
@@ -44,18 +50,42 @@ namespace NT_WeChatUtilities
             }
         }
 
-        public WeChatUtilities(IDistributedCache distributedCache, WeChatApiUrls weChatApiUrls)
+        private async Task<string> GetFromCacheServer(string key, Action<JObject> action = null)
         {
-            _distributedCache = distributedCache;
-            _weChatApiUrls = weChatApiUrls;
+            var url = _url + $"/{key}";
+            var jsonStr = await client.GetStringAsync(url);
+            var jobj = JObject.FromObject(JsonConvert.DeserializeObject(jsonStr));
+            var accessToken = string.Empty;
+            if (jobj.TryGetValue("ErrorObj", out var errorVal))
+            {
+                throw new Exception($"请求缓存服务器出错: {errorVal}");
+            }
+            else
+            {
+                accessToken = jobj["Value"].Value<string>();
+            }
+            return accessToken == "null" ? string.Empty : accessToken;
+        }
+
+        private Task PostDataToCacheServer(string key, WeChatAccessToken value)
+        {
+            var cacheObj = new {
+                Key = key,
+                 Value = JsonConvert.SerializeObject(value),
+                 Options = new
+                 {
+                     AbsoluteExpirationRelativeToNow = value.ExpiresAt.TimeOfDay
+                 }
+            };
+            return client.PostAsJsonAsync(_url, cacheObj);
         }
 
         public async Task<string> GetAccessToken()
         {
             string key = "WeChatAccessToken";
-            var accessTokenResultStr = await _distributedCache.GetStringAsync(key);
+            var accessTokenResultStr = await this.GetFromCacheServer(key);
             WeChatAccessToken accessTokenResult = null;
-            Action<JObject> callback = async jObject =>
+            Action<JObject> callback = jObject =>
             {
                 var expiresAt = DateTime.Now.AddHours(1.5);
                 accessTokenResult = new WeChatAccessToken
@@ -64,9 +94,7 @@ namespace NT_WeChatUtilities
                     ExpiresIn = jObject.GetValue("expires_in").Value<int>(),
                     ExpiresAt = expiresAt
                 };
-                await _distributedCache.SetStringAsync(key, JsonConvert.SerializeObject(accessTokenResult), new DistributedCacheEntryOptions {
-                    AbsoluteExpirationRelativeToNow = TimeSpan.FromHours(1.5)
-                });
+                this.PostDataToCacheServer(key, accessTokenResult);
             };
             if (!string.IsNullOrEmpty(accessTokenResultStr))
             {
@@ -74,7 +102,7 @@ namespace NT_WeChatUtilities
             }
             else
             {
-                this.Get(_weChatApiUrls.GetAcessTokenUrl(), callback);
+                await this.GetFromWechatServer(_weChatApiUrls.GetAcessTokenUrl(), callback);
             }
             return accessTokenResult?.AccessToken;
         }
@@ -82,7 +110,7 @@ namespace NT_WeChatUtilities
         public async Task GetUserInfo(string openId)
         {
             var token = await this.GetAccessToken();
-            this.Get(_weChatApiUrls.GetUserBasicInfoUrl(token, openId), jObject => 
+            await this.GetFromWechatServer(_weChatApiUrls.GetUserBasicInfoUrl(token, openId), jObject => 
             {
 
             });
@@ -105,7 +133,7 @@ namespace NT_WeChatUtilities
                 {
                     eventInfo = new WeChatEventInfo
                     {
-                        EventKey = root.Element("").Value,
+                        EventKey = root.Element("EventKey").Value,
                         EventType = root.Element("Event").Value.ToEnum<WeChatEventType>()
                     };
                 }
@@ -120,9 +148,9 @@ namespace NT_WeChatUtilities
                     EventInfo = eventInfo
                 };
             }
-            catch (System.Exception)
+            catch (System.Exception ex)
             {
-                throw;
+                throw ex;
             }
         }
     }
