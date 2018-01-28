@@ -1,4 +1,7 @@
 {
+    "Database": {
+        "ConnectionString": "server=localhost;database=ntprodb;user=root;password=aspnetcore2018"
+    },
     "RabbitMQ": {
         "HostName": "localhost",
         "Port": 5672,
@@ -15,7 +18,8 @@
         "Url": "http://localhost:5002/api/cache"
     },
     "MQPublishServer": {
-        "Url": "http://localhost:5001/api/publish/message?routingkey={0}&queuename={1}&exchangeName={2}"
+        "Host": "http://localhost:5001",
+        "Url": "api/publish/message?routingkey={0}&queuename={1}&exchangeName={2}"
     },
     "WeChat": {
         "AppID": "wx033d80670080773e",

@@ -20,7 +20,7 @@ namespace NT_MQPublisher
         {
             services.AddMvc();
         
-            services.AddSingleton<ConnectionConfig>();
+            services.AddScoped<ConnectionConfig>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

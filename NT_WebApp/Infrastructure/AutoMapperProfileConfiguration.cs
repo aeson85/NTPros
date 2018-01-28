@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
+using NT_Common.Extensions;
 
 namespace NT_WebApp.Infrastructure
 {
@@ -33,7 +34,7 @@ namespace NT_WebApp.Infrastructure
                         pro_img_lst = new List<Product_Image>();
                         foreach (var item in s.Images)
                         {
-                            var pro_img = m?.SingleOrDefault(p => p.Type == item.Type) ?? new Product_Image();
+                            var pro_img = m?.FirstOrDefault(p => p.Type == item.Type) ?? new Product_Image();
                             var img = pro_img.Image ?? new NTImage();
                             pro_img.Image = c.Mapper.Map(item, img);
                             pro_img.Type = item.Type;
@@ -68,9 +69,11 @@ namespace NT_WebApp.Infrastructure
                         {
                             var imgModel = c.Mapper.Map<ProductImageViewModel>(item.Image);
                             imgModel.Type = item.Type;
+                            imgModel.Identity = $"{item.ProductId}{item.ImageId}".ToCrc32();
                             m.Add(imgModel);
                         } 
                     }
+                    
                     return m;
                 });
             }).ForMember(p => p.Prices, opt => 

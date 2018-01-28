@@ -53,7 +53,7 @@
 			<div class="panel-title">
 				商品信息
 				<i class="fa fa-plus" aria-hidden="true" id="submitGEdit"></i>
-				<i class="fa fa-eraser" aria-hidden="true" id="clearGEdit"></i>
+				<i class="fa fa-times" aria-hidden="true" id="clearGEdit"></i>
 			</div>
 			<div class="g-info-panel">
 				<!--<div class="g-view-main"></div>-->
@@ -86,11 +86,11 @@
 					</tr>
 					<tr>
 						<td><span>原价 :</span></td>
-						<td>￥<input class="input-small" type="text" data-flag="Original"/></td>
+						<td>￥<input class="input-small" type="text" data-arr="Prices" data-flag="Original"/></td>
 						<td><span>现价 :</span></td>
-						<td>￥<input class="input-small" type="text" data-flag="Present"/></td>
+						<td>￥<input class="input-small" type="text" data-arr="Prices" data-flag="Present"/></td>
 						<td><span>会员价 :</span></td>
-						<td>￥<input class="input-small" type="text" data-flag="Membership"/></td>
+						<td>￥<input class="input-small" type="text" data-arr="Prices" data-flag="Membership"/></td>
 					</tr>
 					<tr>
 						<td><span>种类:</span></td>
@@ -170,11 +170,13 @@
 
 	<div class="content-panel panel">
 		<div class='content-page' id='imgsPage'></div>	
+		<div class='content-page' id='goodsPage'></div>	
 	</div>
 
 </div>
 <script src="../../js/public/jquery-2.1.0.min.js"></script>
 <script src="../../js/medium-editor.js"></script>
+<script src="../../js/back/request.js"></script>
 <script src="../../js/back/admin.js"></script>
 <!--<script>-->
 <!--var registSimpleEditor = function(dom,txt){-->

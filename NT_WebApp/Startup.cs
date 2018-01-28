@@ -19,6 +19,7 @@ using NT_WebApp.Models;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Mvc.Routing;
 using AspNetCore.IServiceCollection.AddIUrlHelper;
+using NT_WebApp.Infrastructure.MQ;
 
 namespace NT_WebApp
 {
@@ -58,6 +59,7 @@ namespace NT_WebApp
             //     opt.InstanceName = this.Configuration["Redis:InstanceName"];
             // });
 
+            services.AddSingleton<MQPublishServerUrls>();
             services.AddSingleton<WeChatApiUrls>();
             services.AddSingleton<WeChatUtilities>();
             services.AddUrlHelper();

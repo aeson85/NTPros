@@ -15,6 +15,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\NT_Common\NT_Common.csproj" />
+    <ProjectReference Include="..\NT_Model\NT_Model.csproj" />
   </ItemGroup>
 
 </Project>

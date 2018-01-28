@@ -10,8 +10,6 @@ namespace NT_WeChatUtilities
 
         private readonly string _appSecret;
 
-        public IConfiguration Configuration => _configuration;
-
         public string AppId => _appId;
 
         public string AppSecret => _appSecret;

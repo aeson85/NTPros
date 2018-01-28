@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.IO;
 using System.Net.Http;
 using NT_Common.Extensions;
+using System.Net;
 
 namespace NT_WebApp.Infrastructure
 {
@@ -28,11 +29,21 @@ namespace NT_WebApp.Infrastructure
             return url;
         }
 
-        public void Publish(object message)
+        public async void Publish(object message)
         {
             var url = this.GetPublishServerUrl();
-            //var client = new HttpClient();
-            client.PostAsJsonAsync(url, message);
+            try
+            {
+                var response = await client.PostAsJsonAsync(url, message);
+                if (response.StatusCode != HttpStatusCode.OK)
+                {
+                    throw new Exception($"消息发布服务器处理异常,地址:{url}");
+                }
+            }
+            catch (HttpRequestException)
+            {
+                throw new Exception($"消息发布服务器无法连接,地址:{url}");
+            }
         }
 
         public abstract T GetMessage<T>(Stream stream) where T : class;

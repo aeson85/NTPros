@@ -11,28 +11,38 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using NT_Common;
 using NT_WeChatUtilities;
+using NT_Common.Infrastructure;
 
 namespace NT_WeChatMQConsumer
 {
     class Program
     {
+        private IConfiguration _configuration;
+
+        public IConfiguration Configuration => _configuration;
+
         static void Main(string[] args)
         {
-            var serviceProvider = InitialServiceProvider();
+            Console.Title = "微信消息服务";
+            var program = new Program();
+            program.InitialConfiguration();
+            var serviceCollection = program.InitialServiceProvider();
+            program.ConfigureServices(serviceCollection);
 
-            var config = serviceProvider.GetRequiredService<IConfiguration>();
+            var serviceProvider = serviceCollection.BuildServiceProvider();
+
             var consumerConfigurations = new List<IConsumerHandler>
             {
-                new WeChatConsumerHandler(config, serviceProvider.GetRequiredService<WeChatUtilities>()),
+                new WeChatConsumerHandler(program.Configuration, serviceProvider.GetRequiredService<WeChatUtilities>()),
             };
 
             var factory = new ConnectionFactory
             {
-                HostName = config["RabbitMQ:HostName"],
-                Port = int.Parse(config["RabbitMQ:Port"])
+                HostName = program.Configuration["RabbitMQ:HostName"],
+                Port = int.Parse(program.Configuration["RabbitMQ:Port"])
             };
 
-            var exchangeName = config["RabbitMQ:ExchangeName"];
+            var exchangeName = program.Configuration["RabbitMQ:ExchangeName"];
             using (var connection = factory.CreateConnection())
             using (var channel = connection.CreateModel())
             {
@@ -56,20 +66,23 @@ namespace NT_WeChatMQConsumer
                 Console.ReadLine();
             }
         }
-        private static IConfiguration GetConfiguration()
+        private void InitialConfiguration()
         {
-            return new ConfigurationBuilder().AddJsonFile(Path.GetFullPath(Path.Combine(@"../NT_Common/globalSettings.json")), optional: true, reloadOnChange: true).SetBasePath(Directory.GetCurrentDirectory()).AddJsonFile("appsettings.json", optional: true, reloadOnChange: true).Build();
+            _configuration = ConfigurationSettings.Initial(Directory.GetCurrentDirectory()).Build();
         }
 
-        private static IServiceProvider InitialServiceProvider()
+        private void ConfigureServices(IServiceCollection services)
         {
-            var configuration = GetConfiguration();
+            services.AddSingleton<IConfiguration>(_configuration);
+            services.AddSingleton<WeChatApiUrls>();
+            services.AddSingleton<WeChatUtilities>();
+        }
+
+        private IServiceCollection InitialServiceProvider()
+        {
             var serviceCollection = new ServiceCollection();
             serviceCollection.AddLogging();
-            serviceCollection.AddSingleton<IConfiguration>(configuration);
-            serviceCollection.AddSingleton<WeChatApiUrls>();
-            serviceCollection.AddSingleton<WeChatUtilities>();
-            return serviceCollection.BuildServiceProvider();
+            return serviceCollection;
         }
     }
 }

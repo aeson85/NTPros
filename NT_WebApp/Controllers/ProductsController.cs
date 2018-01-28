@@ -11,6 +11,8 @@ using System.ComponentModel.DataAnnotations;
 using System.Net;
 using NT_Common.Extensions;
 using System.Linq.Expressions;
+using System.Net.Http;
+using NT_WebApp.Infrastructure.MQ;
 
 namespace NT_WebApp.Controllers
 {
@@ -19,16 +21,23 @@ namespace NT_WebApp.Controllers
     {
         private readonly IMapper _mapper;
         private readonly AppDbContext _context;
+        private readonly MQPublishServerUrls _mqPublishServerUrls;
 
-        public ProductsController(IMapper mapper, AppDbContext context)
+        public ProductsController(IMapper mapper, AppDbContext context, MQPublishServerUrls mqPublishServerUrls)
         {
             _mapper = mapper;
             _context = context;
+            _mqPublishServerUrls = mqPublishServerUrls;
         }
         
         [HttpPost]
         public async Task<IActionResult> Post([FromBody]ProductCreateViewModel model)
         {
+            // using (var client = new HttpClient())
+            // {
+            //     var response = await client.PostAsJsonAsync(_mqPublishServerUrls.GetProductCreateUrl(), model);
+            // }
+            // return Ok();
             if (ModelState.IsValid)
             {
                 var product = _mapper.Map<Product>(model);
@@ -47,7 +56,7 @@ namespace NT_WebApp.Controllers
                 var product = _context.Product.Include(p => p.Product_Image_Lst).ThenInclude(p => p.Image).Include(p => p.Product_Price).ThenInclude(p => p.Price).SingleOrDefault(p => p.Id.Equals(model.Id, StringComparison.OrdinalIgnoreCase));
                 if (product != null)
                 {
-                    product = Mapper.Map(model, product);
+                    product = _mapper.Map(model, product);
                     await _context.SaveChangesAsync();
                     return Ok();
                 }

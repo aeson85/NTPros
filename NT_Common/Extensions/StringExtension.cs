@@ -1,6 +1,8 @@
 using System;
 using System.ComponentModel;
 using System.Runtime.Serialization;
+using System.Text;
+using Force.Crc32;
 
 namespace NT_Common.Extensions
 {
@@ -24,6 +26,13 @@ namespace NT_Common.Extensions
                 }
             }
             throw new ArgumentException("Not found.", "description");
+        }
+
+        public static uint ToCrc32(this string selfStr)
+        {
+            var bytes = Encoding.UTF8.GetBytes(selfStr);
+            uint crc32 = Crc32CAlgorithm.Compute(bytes);
+            return crc32;
         }
     }
 }

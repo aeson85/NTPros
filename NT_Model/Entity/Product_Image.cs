@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Collections.Generic;
 using System;
 
-namespace NT_WebApp.Models
+namespace NT_Model.Entity
 {
     public class Product_Image
     {
@@ -14,6 +14,6 @@ namespace NT_WebApp.Models
 
         public NTImage Image { get; set; }
 
-        public int Type { get; set; } 
+        public ProductImgType Type { get; set; } 
     }
 }
