@@ -18,13 +18,15 @@ namespace NT_Database.Infrastructure
 
         public DbSet<NTImage> NTImage { get; set; }
 
+        public DbSet<Product_Image> Product_Image { get; set; }
+
         public DbSet<NTPrice> NTPrice { get; set; }
 
         public AppDbContext(DbContextOptions options) : base(options)
         {
-            
+            Console.WriteLine("实例化 AppDbContext");
         }
-        
+
         public static async Task CreateAdminAccount(IServiceProvider serviceProvider, IConfiguration configuration)
         {
             var userManager = serviceProvider.GetRequiredService<UserManager<AppUser>>();
@@ -72,7 +74,7 @@ namespace NT_Database.Infrastructure
 
             builder.Entity<Product>().HasOne(p => p.Product_Price).WithOne(p => p.Product).HasForeignKey<Product_Price>(p => p.ProductId).OnDelete(DeleteBehavior.Cascade);
 
-            builder.Entity<Product_Image>().HasKey(nameof(Product_Image.ProductId), nameof(Product_Image.ImageId));
+            builder.Entity<Product_Image>().HasKey(nameof(NT_Model.Entity.Product_Image.ProductId), nameof(NT_Model.Entity.Product_Image.ImageId));
 
             builder.Entity<Product>().HasMany(p => p.Product_Image_Lst).WithOne(p => p.Product).OnDelete(DeleteBehavior.Cascade);
 

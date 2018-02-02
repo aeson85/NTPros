@@ -4,8 +4,6 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using NT_WebApp.Models;
-using NT_WebApp.Models.ViewModels;
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.Net;
@@ -13,37 +11,36 @@ using NT_Common.Extensions;
 using System.Linq.Expressions;
 using System.Net.Http;
 using NT_WebApp.Infrastructure.MQ;
+using Newtonsoft.Json;
+using NT_Model.Entity;
+using NT_Model.ViewModel;
 
 namespace NT_WebApp.Controllers
 {
     [Route("api/[controller]")]
     public class ProductsController : Controller
     {
-        private readonly IMapper _mapper;
-        private readonly AppDbContext _context;
         private readonly MQPublishServerUrls _mqPublishServerUrls;
 
-        public ProductsController(IMapper mapper, AppDbContext context, MQPublishServerUrls mqPublishServerUrls)
+        public ProductsController(MQPublishServerUrls mqPublishServerUrls)
         {
-            _mapper = mapper;
-            _context = context;
             _mqPublishServerUrls = mqPublishServerUrls;
         }
         
         [HttpPost]
         public async Task<IActionResult> Post([FromBody]ProductCreateViewModel model)
         {
-            // using (var client = new HttpClient())
-            // {
-            //     var response = await client.PostAsJsonAsync(_mqPublishServerUrls.GetProductCreateUrl(), model);
-            // }
-            // return Ok();
             if (ModelState.IsValid)
             {
-                var product = _mapper.Map<Product>(model);
-                await _context.Product.AddAsync(product);
-                await _context.SaveChangesAsync();
-                return new StatusCodeResult((int)HttpStatusCode.Created);
+                using (var client = new HttpClient())
+                {
+                    var response = await client.PostAsJsonAsync(_mqPublishServerUrls.GetProductCreateUrl(), model);
+                    if (response.StatusCode == HttpStatusCode.OK)
+                    {
+                        return new StatusCodeResult((int)HttpStatusCode.Created);
+                    }
+                    return new StatusCodeResult((int)response.StatusCode);
+                }
             }
             return BadRequest(ModelState);
         }
@@ -53,20 +50,58 @@ namespace NT_WebApp.Controllers
         {
             if (ModelState.IsValid)
             {
+                using (var client = new HttpClient())
+                {
+                    var response = await client.PutAsJsonAsync(_mqPublishServerUrls.GetProductUpdateUrl(), model);
+                    if (response.StatusCode == HttpStatusCode.OK)
+                    {
+                        return Ok();
+                    }
+                    return new StatusCodeResult((int)response.StatusCode);
+                }
+            }
+            return BadRequest();
+            /* 
+            if (ModelState.IsValid)
+            {
                 var product = _context.Product.Include(p => p.Product_Image_Lst).ThenInclude(p => p.Image).Include(p => p.Product_Price).ThenInclude(p => p.Price).SingleOrDefault(p => p.Id.Equals(model.Id, StringComparison.OrdinalIgnoreCase));
                 if (product != null)
                 {
                     product = _mapper.Map(model, product);
+                    foreach (var item in _context.Product_Image.Local.ToList())
+                    {
+                        if (_context.Entry(item).State == EntityState.Deleted)
+                        {
+                            var ntImage = _context.NTImage.SingleOrDefault(p => item.ImageId == p.Id);
+                            _context.Entry(ntImage).State = EntityState.Deleted;
+                        }
+                    }
                     await _context.SaveChangesAsync();
                     return Ok();
                 }
             }
             return BadRequest();
+            */
         }
 
         [HttpGet]
-        public IActionResult Get([FromQuery]ProductSearchViewModel model)
+        public async Task<IActionResult> Get([FromQuery]ProductSearchViewModel model)
         {
+            if (ModelState.IsValid)
+            {
+                using (var client = new HttpClient())
+                {
+                    var response = await client.GetAsync(string.Format(_mqPublishServerUrls.GetProductSelectUrl(), model.Name, model.Id));
+                    if (response.StatusCode == HttpStatusCode.OK)
+                    {
+                        var responseData = await response.Content.ReadAsStringAsync();
+                        return Json(JsonConvert.DeserializeObject(responseData));
+                    }
+                    return new StatusCodeResult((int)response.StatusCode);
+                }
+            }
+            return BadRequest();
+            /*
             Expression<Func<Product, bool>> predicate = p => true;
             if (!string.IsNullOrWhiteSpace(model.Id))
             {
@@ -76,14 +111,29 @@ namespace NT_WebApp.Controllers
             {
                 predicate = predicate.AndAlso(p => EF.Functions.Like(p.Name.ToLower(), $"%{model.Name.ToLower()}%"));
             }
-            var products = _context.Product.AsNoTracking().Include(p => p.Product_Image_Lst).ThenInclude(p => p.Image).Include(p => p.Product_Price).ThenInclude(p => p.Price).Where(predicate);
+            var products = _context.Product.AsNoTracking().Include(p => p.Product_Image_Lst).ThenInclude(p => p.Image).Include(p => p.Product_Price).ThenInclude(p => p.Price).Where(predicate).ToList();
             var productModels = _mapper.Map<List<ProductCreateViewModel>>(products);
             return Ok(productModels);
+            */
         }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(string id)
         {
+            if (ModelState.IsValid)
+            {
+                using (var client = new HttpClient())
+                {
+                    var response = await client.DeleteAsync(_mqPublishServerUrls.GetProductDeleteUrl());
+                    if (response.StatusCode == HttpStatusCode.OK)
+                    {
+                        return Ok();
+                    }
+                    return new StatusCodeResult((int)response.StatusCode);
+                }
+            }
+            return BadRequest();
+            /*
             if (ModelState.IsValid)
             {
                 var product = _context.Product.Include(p => p.Product_Image_Lst).ThenInclude(p => p.Image).Include(p => p.Product_Price).ThenInclude(p => p.Price).SingleOrDefault(p => p.Id.Equals(id, StringComparison.OrdinalIgnoreCase));
@@ -113,6 +163,7 @@ namespace NT_WebApp.Controllers
                 }
             }
             return BadRequest();
+            */
         }
     }
 }

@@ -1,6 +1,11 @@
 using System;
 using System.Text;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Newtonsoft.Json;
+using NT_Database.Infrastructure.Handler;
+using NT_Database.Infrastructure.Repository;
+using NT_Model.ViewModel;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 
@@ -11,7 +16,7 @@ namespace NT_Database.Infrastructure
         private readonly IConnection _connection;
         private readonly IConfiguration _configuration;
         private readonly IModel _channel;
-        
+
         public RPCServer(IConfiguration configuration)
         {
             _configuration = configuration;
@@ -26,9 +31,10 @@ namespace NT_Database.Infrastructure
             _channel = _connection.CreateModel();
         }    
 
-        public void Start()
+        public void Start(IServiceProvider serviceProvider)
         {
-            _channel.QueueDeclare(queue: "rpc_queue", durable: false, autoDelete: false, arguments: null);
+            var queueName = "db_op_queue";
+            _channel.QueueDeclare(queue: queueName, durable: false, autoDelete: false, arguments: null);
             _channel.BasicQos(prefetchSize: 0, prefetchCount: 1, global: false);
             
             var consumer = new EventingBasicConsumer(_channel);
@@ -42,13 +48,21 @@ namespace NT_Database.Infrastructure
                 try
                 {
                     var message = Encoding.UTF8.GetString(body);
-                    Console.WriteLine("新消息: " + message);
-                    response = string.Empty;
+                    using (var dbOpeartor = serviceProvider.GetRequiredService<DbOperator>())
+                    {
+                        response = dbOpeartor.Execute(message);
+                    }
                 }
-                catch(Exception e)
+                catch (DbOperationException ex)
                 {
-                    Console.WriteLine("异常信息: " + e.Message);
-                    response = "";
+                    response = JsonConvert.SerializeObject(ex.Result);
+                }
+                catch (Exception ex)
+                {
+                    response = JsonConvert.SerializeObject(new DbOperationResultViewModel 
+                    {
+                        ErrorMsg = ex.Message
+                    });
                 }
                 finally
                 {
@@ -58,7 +72,7 @@ namespace NT_Database.Infrastructure
                 }
             };
 
-            _channel.BasicConsume(queue: "rpc_queue", autoAck: false, consumer: consumer);
+            _channel.BasicConsume(queue: queueName, autoAck: false, consumer: consumer);
         }
 
         public void Dispose()

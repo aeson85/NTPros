@@ -7,7 +7,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.FileProviders.Internal;
 using Microsoft.Extensions.FileProviders.Physical;
-using NT_WebApp.Models.ViewModels;
+using NT_Model.ViewModel;
 
 namespace NT_WebApp.Controllers
 {

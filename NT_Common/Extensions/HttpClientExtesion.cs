@@ -19,5 +19,10 @@ namespace NT_Common.Extensions
         {
             return client.PostAsync(url, new JsonContent(obj));
         } 
+
+        public static Task<HttpResponseMessage> PutAsJsonAsync(this HttpClient client, string url, object obj)
+        {
+            return client.PutAsync(url, new JsonContent(obj));
+        } 
     }
 }

@@ -1,6 +1,6 @@
 (function(window){
 	var admin = {};
-	admin.debug = false;
+	admin.debug = true;
 	admin.path = admin.debug?"http://47.104.84.30":""
 	admin.curPage = null;
 	window.admin = admin;
@@ -174,19 +174,17 @@
 			}
 
 			this.createColumn = function(callback){
-				var clen = Math.floor(($(container).width()-self.offset)/(self.cWidth+self.gutter));
-				if(clen<2){clen = 2;}
+				var clen = Math.floor(($(container).width()-self.offset)/(self.cWidth+self.gutter+18));
+				//if(clen<2){clen = 2;}
 				if(self.clen && self.clen == clen){return;}
 				self.clen = clen;
 				container.innerHTML = '';	
 				self.cols = [];
 				for(var i=0;i<clen;i++){
 					var column = admin.widget.createDom('div',null,container);
-					column.style['width'] = self.cWidth + self.gutter + 8 + 'px';
-					column.style['padding'] = '10px 0';
+					column.style['width'] = self.cWidth + self.gutter + 18 + 'px';
 					column.style['float'] = 'left';
 					column.style['overflow'] = 'hidden';
-					console.log(container);
 					self.cols.push(column);
 				}
 
@@ -269,7 +267,10 @@
 				$(".tool-btn i").eq(n).click();
 			}
 
-			$(".tool-btn i").click(function(){
+			$(".tool-btn i").click(function(e){
+				if(e.currentTarget.dataset.flag=='goods'){
+					admin.GoodShelves.init();
+				}
 				$(".ctl-panel").hide();
 				$(".content-page").hide();
 				$("#"+this.dataset.flag+"Panel").show();
@@ -284,12 +285,12 @@
 
 		this.initShortcut = function(){
 			document.body.onkeydown = function(e){
-				console.log(e.keyCode);
 				if(e.keyCode == '49' && e.altKey){
 					self.navTarget(1);
 				}
 
 				if(e.keyCode == '50' && e.altKey){
+					admin.GoodShelves.init();
 					self.navTarget(2);
 				}
 			}
@@ -420,28 +421,28 @@
 		}	
 
 		this.initInfoData = function(){
-			this.TmpData = {};	
-			this.TmpData["Name"] = "";
-			this.TmpData["Images"] = [
+			self.TmpData = {};	
+			self.TmpData["Name"] = "";
+			self.TmpData["Images"] = [
 			{"Url":"","Width":null,"Height":null,"Type":0},
 			{"Url":"","Width":null,"Height":null,"Type":1},
 			{"Url":"","Width":null,"Height":null,"Type":1}
 			];
 
-			this.TmpData["Title"] = "";
-			this.TmpData["Introduction"] = "";
-			this.TmpData["Details"] = "";
-			this.TmpData["Prices"] = {};
-			this.TmpData["Prices"]["Original"] = 0;
-			this.TmpData["Prices"]["Present"] = 0;
-			this.TmpData["Prices"]["Membership"] = 0;
-			this.TmpData["Type"] = 0;
-			this.TmpData["Group"] = 0;
-			this.TmpData["PubType"] = 0;
-			this.TmpData["CanCollection"] = false;
-			this.TmpData["ResDateStart"] = "1990-1-1";
-			this.TmpData["ResDateEnd"] = "1990-1-1";
-			this.TmpData["Widget"] = "";
+			self.TmpData["Title"] = "";
+			self.TmpData["Introduction"] = "";
+			self.TmpData["Details"] = "";
+			self.TmpData["Prices"] = {};
+			self.TmpData["Prices"]["Original"] = 0;
+			self.TmpData["Prices"]["Present"] = 0;
+			self.TmpData["Prices"]["Membership"] = 0;
+			self.TmpData["Type"] = 0;
+			self.TmpData["Group"] = 0;
+			self.TmpData["PubType"] = 0;
+			self.TmpData["CanCollection"] = false;
+			self.TmpData["ResDateStart"] = "1990-1-1";
+			self.TmpData["ResDateEnd"] = "1990-1-1";
+			self.TmpData["Widget"] = "";
 		}
 
 
@@ -465,6 +466,7 @@
 							}else{
 								self.TmpData[this.dataset.flag] = this.value;
 							}
+							console.log(self.TmpData);
 						});
 					});
 				},
@@ -492,18 +494,29 @@
 						if(this.name == "CanCollection"){
 							self.TmpData[this.name] = (this.value=="0")?false:true;
 						}else{
-							self.TmpData[this.name] = this.value;
+							self.TmpData[this.name] = parseInt(this.value,10);
+							if(this.name == "Group"){
+								if(this.value == "3"){
+									$("#resLine").show();
+								}else{
+									$("#resLine").hide();
+								}
+							}
 						}
+						console.log(self.TmpData)
 					});
 				},
 				setRadio:function(flag,val){
 					self.TmpData[flag] = val;
-					$(_table).find("input[type='radio']").each(function(){
+					$(_table).find("input[type='radio'][name="+flag+"]").each(function(){
 						if(this.value == val){
 							this.checked = true;	
+							console.log(flag,val);
 						}else{
 							this.checked = false;	
 						}
+
+
 					})
 				},
 				clearRadio:function(){
@@ -528,7 +541,6 @@
 					});
 				},
 				setTextarea:function(flag,val){
-					console.log(flag,val)
 					$(_table).find("div[contenteditable='true'][data-flag="+flag+"]").html(val);
 					self.TmpData[flag] = val;
 				},
@@ -556,6 +568,13 @@
 						});
 					})
 				},
+
+				//registDateEvent:function(){
+					//$(_table).find("input[type='datetime-local']").change(function(){
+						//self.TmpData[this.dataset.flag] = this.value;
+						//conosle.log(this.value)
+					//});
+				//},
 				registEvent:function(){
 					$("#clearGEdit").click(this.clear);
 					$("#submitGEdit").click(this.submit);
@@ -564,11 +583,11 @@
 						var flag = this.dataset.flag;
 						this.innerHTML = '';
 						var url = admin.widget.createDom("input",null,this);
+						url.type = "text";
 						$(url).focus();
 
 						$(url).blur(function(){
 							_this.style['background-image'] = "url("+url.value+")";
-							//$(this).remove();
 							var img = new Image();
 							img.src = url.value;
 							img.onload = function(){
@@ -579,7 +598,6 @@
 								o.Type = 0;
 								self.TmpData.Images[flag] = o;
 								$(url).remove();
-								console.log(self.TmpData.Images);
 							}
 						});
 
@@ -595,7 +613,6 @@
 								o.Type = 0;
 								self.TmpData.Images[flag] = o;
 								$(url).remove();
-								console.log(self.TmpData.Images);
 							}
 						})
 
@@ -611,26 +628,28 @@
 					_this.ctl.clearImage();
 				},
 				submit:function(){
+					self.TmpData.ResDateStart = $("#resDateStart").val();
+					self.TmpData.ResDateEnd = $("#resDateEnd").val();
 					console.log(self.TmpData);
 					$.ajax({
 						type:_this.ctl.type?'put':'post',
-					url:admin.path+"/api/products",
-					datatype:'json',
-					data:JSON.stringify(self.TmpData),
-					headers:{
-						"Access-Control-Allow-Headers":"Origin, Content-Type, Cookie, Accept",
-					"Content-Type" : "application/json; charset=UTF-8",
-					"X-Requested-With":"XMLHttpRequest"
-					},
-					success:function(data){
-						admin.GoodShelves.init();
-						$("#submitGEdit")[0].className = "fa fa-plus";
-						_this.ctl.clear();
-						_this.ctl.type = 0;	
-					},
-					error:function(msg){
-						console.log(msg);
-					}
+						url:admin.path+"/api/products",
+						datatype:'json',
+						data:JSON.stringify(self.TmpData),
+						headers:{
+							"Access-Control-Allow-Headers":"Origin, Content-Type, Cookie, Accept",
+							"Content-Type" : "application/json; charset=UTF-8",
+							"X-Requested-With":"XMLHttpRequest"
+						},
+						success:function(data){
+							admin.GoodShelves.init();
+							$("#submitGEdit")[0].className = "fa fa-plus";
+							_this.ctl.clear();
+							_this.ctl.type = 0;	
+						},
+						error:function(msg){
+							console.log(msg);
+						}
 					});
 				},
 				setForm:function(data){
@@ -643,13 +662,24 @@
 					_this.ctl.setText(null,"Name",data.name);
 					_this.ctl.setText(null,"Title",data.title);
 					_this.ctl.setTextarea("Introduction",data.introduction);
-					_this.ctl.setTextarea("Type",data.type);
+					_this.ctl.setTextarea("Details",data.Details);
+					_this.ctl.setRadio("Type",data.type);
 					_this.ctl.setRadio("Group",data.group);
+					if(data.group == 3){
+						$("#resLine").show();
+					}else{
+						$("#resLine").hide();
+					}
 					_this.ctl.setRadio("PubType",data.pubType);
 					_this.ctl.setRadio("CanCollection",data.canCollection);
 					_this.ctl.setImage(0,data.images[0]);
 					_this.ctl.setImage(1,data.images[1]);
 					_this.ctl.setImage(2,data.images[2]);
+					$("#resDateStart").val(data.resDateStart);
+					self.TmpData.ResDateStart = data.resDateStart;
+					$("#resDateEnd").val(data.resDateEnd);
+					self.TmpData.ResDateEnd = data.ResDateEnd;
+					console.log(self.TmpData);
 				},
 				getForm:function(){
 
@@ -667,7 +697,6 @@
 
 		this.getRequestData = function(){
 			$.get(admin.path+"/api/products",null,function(data){
-				console.log(data);
 				self.initWaterfall(data);
 			});
 		}
@@ -692,11 +721,11 @@
 		this.createItem = function(item,data,next){
 			var eleBG = admin.widget.createDom("div:ele-bg",null,item);
 			eleBG.style['background-image'] = "url("+data.images[0].url+")";
-			var usrBar = admin.widget.createDom("div:usr-bar",null,item); 
-			var usrBarBG = admin.widget.createDom("div:usr-bar-bg",null,usrBar); 
-			var name = admin.widget.createDom("p",null,usrBar); 
+			var eleBar = admin.widget.createDom("div:ele-bar",null,item); 
+			var eleBarBG = admin.widget.createDom("div:ele-bar-bg",null,eleBar); 
+			var name = admin.widget.createDom("p",null,eleBar); 
 			name.innerHTML = data.name;
-			var op= admin.widget.createDom("h2",null,usrBar); 
+			var op= admin.widget.createDom("h2",null,eleBar); 
 			op.innerHTML ="原价：￥"+data.prices.original;
 			var pp = admin.widget.createDom("span",null,op); 
 			pp.innerHTML ="现价：￥"+ data.prices.present;
@@ -704,6 +733,19 @@
 			mp.innerHTML ="会员价：￥"+ data.prices.membership;
 			//var ico = admin.widget.createDom("a:fa fa-bars usr-mark-ico-right",null,null,usrBar); 
 			//$(ico).attr("aria-hidden","true");
+			//
+			if(data.group == 3){
+				var eleDateBar = admin.widget.createDom("div:ele-date-bar",null,item); 
+				var ico = admin.widget.createDom("a:fa fa-calendar",null,eleDateBar); 
+				$(ico).attr("aria-hidden","true");
+
+				var sp= admin.widget.createDom("label:ele-date-start",null,eleDateBar); 
+				sp.innerHTML = data.resDateStart.split('T').join(" ");
+
+				var ep= admin.widget.createDom("label:ele-date-end",null,eleDateBar); 
+				ep.innerHTML = data.resDateEnd.split('T').join(" ");
+				
+			}
 			
 
 			var sw = data.images[0].width;	
@@ -713,6 +755,17 @@
 			h = h<w?w:h;
 			eleBG.style["width"] = "100%";
 			eleBG.style["height"] = h + "px";
+
+			switch(data.group){
+				case 1:item.style['border'] = 'solid 8px #222';break;
+				case 2:item.style['border'] = 'solid 8px #fefefe';break;	
+				case 3:item.style['border'] = 'solid 8px #caa979';break;	
+				case 4:item.style['border'] = 'solid 8px #37646b';break;	
+				case 5:item.style['border'] = 'solid 8px #6993a0';break;	
+				case 6:item.style['border'] = 'solid 8px #ffc966';break;	
+				default:break;
+			}
+
 			next(h);
 
 			//eleBG.style["width"] = "100%";

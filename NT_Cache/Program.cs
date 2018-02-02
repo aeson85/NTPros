@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -8,6 +9,7 @@ using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using NT_CommonConfig.Infrastructure;
 
 namespace NT_Cache
 {
@@ -15,6 +17,7 @@ namespace NT_Cache
     {
         public static void Main(string[] args)
         {
+            Console.Title = "Cache Server,PID: " +　Process.GetCurrentProcess().Id;
             BuildWebHost(args).Run();
         }
 
@@ -25,6 +28,9 @@ namespace NT_Cache
             .UseContentRoot(Directory.GetCurrentDirectory())
             .ConfigureAppConfiguration((hostingContext, config) =>
             {
+                var env = hostingContext.HostingEnvironment;
+                ConfigurationSettings.Initial(hostingContext, config, args, env.ContentRootPath);
+                /*
                 var env = hostingContext.HostingEnvironment;
                 var settingPath = Path.GetFullPath(Path.Combine(@"../NT_Common/globalSettings.json"));
 
@@ -45,6 +51,7 @@ namespace NT_Cache
                 {
                     config.AddCommandLine(args);
                 }
+                */
             })
             .ConfigureLogging((hostingContext, logging) => 
             {

@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace NT_Model.Entity
 {
-    public class NTPrice
+    public class NTPrice : IBaseEntity
     {
         [MaxLength(256)]
         public string Id { get; set; }

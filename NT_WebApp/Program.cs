@@ -12,6 +12,8 @@ using Microsoft.Extensions.Options;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.AspNetCore.Server.Kestrel.Core.Internal;
+using NT_CommonConfig.Infrastructure;
+using System.Diagnostics;
 
 namespace NT_WebApp
 {
@@ -19,6 +21,7 @@ namespace NT_WebApp
     {
         public static void Main(string[] args)
         {
+            Console.Title = "WebApp,PID: " +　Process.GetCurrentProcess().Id;
             BuildWebHost(args).Run();
         }
 
@@ -29,6 +32,9 @@ namespace NT_WebApp
             .UseContentRoot(Directory.GetCurrentDirectory())
             .ConfigureAppConfiguration((hostingContext, config) =>
             {
+                var env = hostingContext.HostingEnvironment;
+                ConfigurationSettings.Initial(hostingContext, config, args, env.ContentRootPath);
+                /*
                 var env = hostingContext.HostingEnvironment;
                 var settingPath = Path.GetFullPath(Path.Combine(@"../NT_Common/globalSettings.json"));
 
@@ -49,6 +55,7 @@ namespace NT_WebApp
                 {
                     config.AddCommandLine(args);
                 }
+                */
             })
             .ConfigureLogging((hostingContext, logging) => 
             {

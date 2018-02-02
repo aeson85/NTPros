@@ -16,6 +16,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\NT_WeChatUtilities\NT_WeChatUtilities.csproj" />
+    <ProjectReference Include="..\NT_CommonConfig\NT_CommonConfig.csproj" />
   </ItemGroup>
 
 </Project>

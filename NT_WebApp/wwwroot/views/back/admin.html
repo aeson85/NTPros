@@ -127,8 +127,19 @@
 							<label>优惠</label>	
 							<input type="radio" name='Group' value="6"/>
 							<label>推荐</label>	
+							<input type="hidden" id='Group' value="0"/>
 						</td>
 					</tr>
+					<tbody id="resLine" style="display:none;">
+					<tr>
+						<td><span>预订开始 :</span></td>
+						<td colspan="5"><input type="datetime-local" id="resDateStart"/></td>
+					</tr>
+					<tr>
+						<td><span>预订结束 :</span></td>
+						<td colspan="5"><input type="datetime-local" id="resDateEnd"/></td>
+					</tr>
+					</tbody>
 					<tr>
 						<td><span>公共类型:</span></td>
 						<td colspan="5">

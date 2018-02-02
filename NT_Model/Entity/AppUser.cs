@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Identity;
 
 namespace NT_Model.Entity
 {
-    public class AppUser : IdentityUser
+    public class AppUser : IdentityUser, IBaseEntity
     {
         public string NickName { get; set; }
 

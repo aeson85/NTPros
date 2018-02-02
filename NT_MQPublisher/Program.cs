@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -9,6 +10,7 @@ using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using NT_CommonConfig.Infrastructure;
 
 namespace NT_MQPublisher
 {
@@ -16,6 +18,7 @@ namespace NT_MQPublisher
     {
         public static void Main(string[] args)
         {
+            Console.Title = "Meesage Publish Server,PID: " +　Process.GetCurrentProcess().Id;
             BuildWebHost(args).Run();
         }
 
@@ -26,6 +29,9 @@ namespace NT_MQPublisher
             .UseContentRoot(Directory.GetCurrentDirectory())
             .ConfigureAppConfiguration((hostingContext, config) =>
             {
+                var env = hostingContext.HostingEnvironment;
+                ConfigurationSettings.Initial(hostingContext, config, args, env.ContentRootPath);
+                /*
                 var env = hostingContext.HostingEnvironment;
                 var settingPath = Path.GetFullPath(Path.Combine(@"../NT_Common/globalSettings.json"));
 
@@ -46,6 +52,7 @@ namespace NT_MQPublisher
                 {
                     config.AddCommandLine(args);
                 }
+                */
             })
             .ConfigureLogging((hostingContext, logging) => 
             {

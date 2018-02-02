@@ -4,14 +4,26 @@ using System;
 
 namespace NT_Model.Entity
 {
-    public class Product
+    public class Product : IBaseEntity
     {
         [MaxLength(256)]
         public string Id { get; set; }
 
         public string Name { get; set; }
 
-        public List<Product_Image> Product_Image_Lst { get; set; }
+        private List<Product_Image> _product_Image_lst;
+        public List<Product_Image> Product_Image_Lst
+        {
+            get
+            {
+                return _product_Image_lst;
+            }
+            set
+            {
+                _product_Image_lst = value;
+            }
+        }
+        
 
         public string Title { get; set; }
 

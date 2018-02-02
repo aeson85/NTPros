@@ -11,7 +11,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using NT_Common;
 using NT_WeChatUtilities;
-using NT_Common.Infrastructure;
+using NT_CommonConfig.Infrastructure;
+using System.Diagnostics;
 
 namespace NT_WeChatMQConsumer
 {
@@ -23,7 +24,7 @@ namespace NT_WeChatMQConsumer
 
         static void Main(string[] args)
         {
-            Console.Title = "微信消息服务";
+            Console.Title = "Message Queue Client,PID: " +　Process.GetCurrentProcess().Id;
             var program = new Program();
             program.InitialConfiguration();
             var serviceCollection = program.InitialServiceProvider();

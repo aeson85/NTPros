@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Identity;
 
 namespace NT_Model.Entity
 {
-    public class WeChatInfo
+    public class WeChatInfo : IBaseEntity
     {
         [MaxLength(256)]
         public string Id { get; set;}

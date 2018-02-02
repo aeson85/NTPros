@@ -15,11 +15,12 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
 using NT_WeChatUtilities;
 using NT_WebApp.Infrastructure;
-using NT_WebApp.Models;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Mvc.Routing;
 using AspNetCore.IServiceCollection.AddIUrlHelper;
 using NT_WebApp.Infrastructure.MQ;
+using NT_CommonConfig.Infrastructure;
+using NT_Model.Entity;
 
 namespace NT_WebApp
 {
@@ -34,21 +35,21 @@ namespace NT_WebApp
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<AppDbContext>(opts =>
-            {
-                opts.UseMySQL(_configuration["Database:ConnectionString"]);
-            });
-            services.AddIdentity<AppUser, IdentityRole>().AddEntityFrameworkStores<AppDbContext>().AddDefaultTokenProviders();
+            // services.AddDbContext<AppDbContext>(opts =>
+            // {
+            //     opts.UseMySQL(_configuration["Database:ConnectionString"]);
+            // });
+            // services.AddIdentity<AppUser, IdentityRole>().AddEntityFrameworkStores<AppDbContext>().AddDefaultTokenProviders();
 
-            services.AddIdentity<AppUser, IdentityRole>(opt => 
-            {
-                opt.Password.RequiredLength = 6;
-                opt.Password.RequireNonAlphanumeric = false;
-                opt.Password.RequireLowercase = false;
-                opt.Password.RequireUppercase = false;
-                opt.Password.RequireDigit = false;
-                opt.User.RequireUniqueEmail = true;
-            });
+            // services.AddIdentity<AppUser, IdentityRole>(opt => 
+            // {
+            //     opt.Password.RequiredLength = 6;
+            //     opt.Password.RequireNonAlphanumeric = false;
+            //     opt.Password.RequireLowercase = false;
+            //     opt.Password.RequireUppercase = false;
+            //     opt.Password.RequireDigit = false;
+            //     opt.User.RequireUniqueEmail = true;
+            // });
 
             var physicalFileProvider = new PhysicalFileProvider(_configuration["Ftp:RootPath"]);
             services.AddSingleton<IFileProvider>(physicalFileProvider);
@@ -66,7 +67,8 @@ namespace NT_WebApp
         
             services.AddSingleton(provider => new MapperConfiguration(cfg =>
             {
-                cfg.AddProfile(new AutoMapperProfileConfiguration(_configuration));
+                cfg.AddProfile(new DbEntityProfile(_configuration));
+                cfg.AddProfile(new FTPProfile(_configuration));
             }).CreateMapper());
 
             services.AddSingleton(factory => 

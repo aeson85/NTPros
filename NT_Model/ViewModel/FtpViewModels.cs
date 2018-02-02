@@ -1,6 +1,6 @@
 using System;
 
-namespace NT_WebApp.Models.ViewModels
+namespace NT_Model.ViewModel
 {
     public interface IPhysicalDirectoryInfoViewModel
     {

@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace NT_WebApp.Models.ViewModels
+namespace NT_Model.ViewModel
 {
     public class ProductImageViewModel
     {
@@ -13,18 +13,25 @@ namespace NT_WebApp.Models.ViewModels
 
         public int Type { get; set; } 
 
-        public uint Identity { get; set; }
+        public string MockId { get; set; }
     }
 
     public class ProductPriceViewModel
     {
-        public string Id { get; set; }
+        public string MockId { get; set; }
 
         public float Original { get; set; }
 
         public float Present { get; set; }
 
         public float Membership { get; set; }
+    }
+
+    public class ProductQueryViewModel
+    {
+        public string Id { get; set; }
+
+        public string Name { get; set; }
     }
 
     public class ProductCreateViewModel
