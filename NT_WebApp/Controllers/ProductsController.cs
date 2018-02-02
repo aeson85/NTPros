@@ -10,10 +10,10 @@ using System.Net;
 using NT_Common.Extensions;
 using System.Linq.Expressions;
 using System.Net.Http;
-using NT_WebApp.Infrastructure.MQ;
 using Newtonsoft.Json;
 using NT_Model.Entity;
 using NT_Model.ViewModel;
+using NT_CommonConfig.Infrastructure;
 
 namespace NT_WebApp.Controllers
 {

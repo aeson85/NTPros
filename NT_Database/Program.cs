@@ -23,7 +23,6 @@ namespace NT_Database
         {
             Console.Title = "Database Opeartion Server,PID: " +　Process.GetCurrentProcess().Id;
             var program = new Program();
-            program.InitialMapper();
             program.InitialConfiguration();
             var serviceCollection = program.InitialServiceProvider();
             program.ConfigureServices(serviceCollection);
@@ -32,19 +31,11 @@ namespace NT_Database
 
             using (var rpcServer = serviceProvider.GetRequiredService<RPCServer>())
             {
-                rpcServer.Start(serviceProvider);
+                rpcServer.Start();
 
-                Console.WriteLine("RPC服务正在监听请求...按任意键结束");
+                Console.WriteLine("Waiting for message, press [enter] to exit.");
                 Console.ReadLine();
             }
-        }
-
-        private void InitialMapper()
-        {
-            Mapper.Initialize(config =>
-            {
-                config.AddProfile(new DbEntityProfile(_configuration));
-            });
         }
 
         private void InitialConfiguration()
@@ -59,6 +50,9 @@ namespace NT_Database
             services.AddTransient<IUnitOfWork, UnitOfWork>();
             services.AddTransient<DbOperator>();
             services.AddSingleton<ILoggerFactory, LoggerFactory>();
+            services.AddTransient<ProductDbHandler>();
+            services.AddTransient<AppUserDbHandler>();
+
             services.AddDbContext<AppDbContext>(opts =>
             {
                 opts.UseMySQL(_configuration["Database:ConnectionString"]);
@@ -68,6 +62,7 @@ namespace NT_Database
             {
                 cfg.AddProfile(new DbEntityProfile(_configuration));
             }).CreateMapper());
+            
 
             JsonConvert.DefaultSettings = () => new JsonSerializerSettings
             {

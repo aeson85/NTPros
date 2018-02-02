@@ -18,7 +18,6 @@ using NT_WebApp.Infrastructure;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Mvc.Routing;
 using AspNetCore.IServiceCollection.AddIUrlHelper;
-using NT_WebApp.Infrastructure.MQ;
 using NT_CommonConfig.Infrastructure;
 using NT_Model.Entity;
 
@@ -41,15 +40,15 @@ namespace NT_WebApp
             // });
             // services.AddIdentity<AppUser, IdentityRole>().AddEntityFrameworkStores<AppDbContext>().AddDefaultTokenProviders();
 
-            // services.AddIdentity<AppUser, IdentityRole>(opt => 
-            // {
-            //     opt.Password.RequiredLength = 6;
-            //     opt.Password.RequireNonAlphanumeric = false;
-            //     opt.Password.RequireLowercase = false;
-            //     opt.Password.RequireUppercase = false;
-            //     opt.Password.RequireDigit = false;
-            //     opt.User.RequireUniqueEmail = true;
-            // });
+            services.AddIdentity<AppUser, IdentityRole>(opt => 
+            {
+                opt.Password.RequiredLength = 6;
+                opt.Password.RequireNonAlphanumeric = false;
+                opt.Password.RequireLowercase = false;
+                opt.Password.RequireUppercase = false;
+                opt.Password.RequireDigit = false;
+                opt.User.RequireUniqueEmail = true;
+            });
 
             var physicalFileProvider = new PhysicalFileProvider(_configuration["Ftp:RootPath"]);
             services.AddSingleton<IFileProvider>(physicalFileProvider);
@@ -77,7 +76,7 @@ namespace NT_WebApp
                 {
                     switch (key)
                     {
-                        case "wechat": return new WeChatMessageDelivery(_configuration, factory.GetRequiredService<WeChatUtilities>());
+                        case "wechat": return new WeChatMessageDelivery(_configuration, factory.GetRequiredService<WeChatUtilities>(), factory.GetRequiredService<MQPublishServerUrls>());
                         default: return null;
                     }
                 };

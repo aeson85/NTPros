@@ -107,13 +107,15 @@ namespace NT_WeChatUtilities
             return accessTokenResult?.AccessToken;
         }
 
-        public async Task GetUserInfo(string openId)
+        public async Task<WeChatUserBasicInfo> GetUserInfo(string openId)
         {
             var token = await this.GetAccessToken();
+            WeChatUserBasicInfo basicUserInfo = null;
             await this.GetFromWechatServer(_weChatApiUrls.GetUserBasicInfoUrl(token, openId), jObject => 
             {
-
+                basicUserInfo = jObject.ToObject<WeChatUserBasicInfo>();
             });
+            return basicUserInfo;
         }
 
         public WeChatMessage Parse(Stream requestStream)

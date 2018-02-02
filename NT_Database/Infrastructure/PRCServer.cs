@@ -16,10 +16,12 @@ namespace NT_Database.Infrastructure
         private readonly IConnection _connection;
         private readonly IConfiguration _configuration;
         private readonly IModel _channel;
+        private readonly IServiceProvider _serviceProvider;
 
-        public RPCServer(IConfiguration configuration)
+        public RPCServer(IServiceProvider serviceProvider)
         {
-            _configuration = configuration;
+            _configuration = serviceProvider.GetRequiredService<IConfiguration>();
+            _serviceProvider = serviceProvider;
 
             var factory = new ConnectionFactory
             {
@@ -31,7 +33,7 @@ namespace NT_Database.Infrastructure
             _channel = _connection.CreateModel();
         }    
 
-        public void Start(IServiceProvider serviceProvider)
+        public void Start()
         {
             var queueName = "db_op_queue";
             _channel.QueueDeclare(queue: queueName, durable: false, autoDelete: false, arguments: null);
@@ -48,9 +50,9 @@ namespace NT_Database.Infrastructure
                 try
                 {
                     var message = Encoding.UTF8.GetString(body);
-                    using (var dbOpeartor = serviceProvider.GetRequiredService<DbOperator>())
+                    using (var dbOperator = _serviceProvider.GetRequiredService<DbOperator>())
                     {
-                        response = dbOpeartor.Execute(message);
+                        response = dbOperator.Execute(message);
                     }
                 }
                 catch (DbOperationException ex)

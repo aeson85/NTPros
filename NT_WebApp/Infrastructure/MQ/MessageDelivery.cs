@@ -8,6 +8,7 @@ using System.IO;
 using System.Net.Http;
 using NT_Common.Extensions;
 using System.Net;
+using NT_CommonConfig.Infrastructure;
 
 namespace NT_WebApp.Infrastructure
 {
@@ -15,17 +16,22 @@ namespace NT_WebApp.Infrastructure
     {
         private static HttpClient client = new HttpClient();
         private readonly IConfiguration _configuration;
+        private readonly MQPublishServerUrls _mqPublishServerUrls;
 
         protected abstract string QueueName { get; }
         protected abstract string RoutingKey { get; }
 
-        public MessageDelivery(IConfiguration configuration) => _configuration = configuration;
+        public MessageDelivery(IConfiguration configuration, MQPublishServerUrls mqPublishServerUrls)
+        {
+            _configuration = configuration;
+            _mqPublishServerUrls = mqPublishServerUrls;
+
+        }
 
         protected string GetPublishServerUrl()
         {
-            var url = _configuration["MQPublishServer:Url"];
             var exchangeName = _configuration["RabbitMQ:ExchangeName"];
-            url = string.Format(url, this.RoutingKey, this.QueueName, exchangeName);
+            var url = string.Format(_mqPublishServerUrls.GetWeChatUrl(),this.RoutingKey, this.QueueName, exchangeName);
             return url;
         }
 

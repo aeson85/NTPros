@@ -25,47 +25,12 @@ namespace NT_CommonConfig.Infrastructure
             this.CreateMap<ProductSearchViewModel, Product>().ForAllMembers(p => p.Condition((s, d, sm, dm) => sm != null));
             this.CreateMap<Product_Image, Product_Image>().ForAllMembers(p => p.Condition((s, d, sm, dm) => sm != null));
             this.CreateMap<Product_Price, Product_Price>().ForAllMembers(p => p.Condition((s, d, sm, dm) => sm != null));
-
             this.CreateMap<Product, Product>().ForAllMembers(p => p.Condition((s, d, sm, dm) => sm != null));
-            /*
-            this.CreateMap<Product, Product>().ForMember(p => p.Product_Image_Lst, opt => 
-            {
-                opt.ResolveUsing((s, d, dm, c) => 
-                {
-                    List<Product_Image> pro_img_lst = new List<Product_Image>();
-                    if (s.Product_Image_Lst?.Count() > 0)
-                    {
-                        foreach (var pro_img in s.Product_Image_Lst)
-                        {
-                            var dbPro_Img = d.Product_Image_Lst?.SingleOrDefault(p => p.MockId == pro_img.MockId);
-                            if (dbPro_Img == null)
-                            {
-                                dbPro_Img = new Product_Image();
-                            }
-                            dbPro_Img.Image = dbPro_Img.Image ?? new NTImage();
-                            dbPro_Img.Image = c.Mapper.Map(pro_img.Image, dbPro_Img.Image);
-                            //dbPro_Img = c.Mapper.Map(pro_img, dbPro_Img);
-                            pro_img_lst.Add(dbPro_Img);
-                        }
-                    }
-                    return pro_img_lst;
-                });
-            }).ForMember(p => p.Product_Price, opt =>
-            {
-                opt.ResolveUsing<Product_Price>((s, d, dm, c) =>
-                {
-                    Product_Price pro_price = null;
-                    if (s.Product_Price != null)
-                    {
-                        pro_price = s.Product_Price;
-                        var price = pro_price.Price ?? new NTPrice(); 
-                        pro_price.Price = price;
-                    }
-                    return pro_price;
-                });
-            }).ForAllMembers(p => p.Condition((s, d, sm, dm) => sm != null));
-            */
-
+            
+            this.CreateMap<WeChatInfo, WeChatInfo>().ForAllMembers(p => p.Condition((s, d, sm, dm) => sm != null));
+            this.CreateMap<AppUserViewModel, AppUser>().ForAllMembers(p => p.Condition((s, d, sm, dm) => sm != null));
+            this.CreateMap<AppUserSearchViewModel, AppUser>().ForAllMembers(p => p.Condition((s, d, sm, dm) => sm != null));
+            
             this.CreateMap<ProductCreateViewModel, Product>().ForMember(p => p.Product_Image_Lst, opt => 
             {
                 opt.ResolveUsing<List<Product_Image>>((s, d, dm, c) => 
