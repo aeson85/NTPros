@@ -73,27 +73,28 @@ namespace NT_Database.Infrastructure.Handler
                 result.ErrorMsg = $"Id: {model.Id} not found";
             }
             return result;
-            /*
+        }
+
+        public override DbOperationResultViewModel Delete(string id)
+        {
             var result = this.CreateReponse();
-            var model = JsonConvert.DeserializeObject<ProductCreateViewModel>(entityStr);
-            var entity = _repository.SingleOrDefault(p => p.Id == model.Id, disableTracking: false);
-            if (entity != null)
+            var product = _repository.SingleOrDefault(p => p.Id == id, disableTracking: false);
+            if (product != null)
             {
-                entity = _mapper.Map(model, entity);
-                var productImageRepository = this.UnitOfWork.Repository<Product_Image>();
+                var imageLst = product.Product_Image_Lst?.Select(p => p.Image).ToArray();
                 var imageRepository = this.UnitOfWork.Repository<NTImage>();
-                foreach (var item in productImageRepository.Local(EntityState.Deleted))
-                {
-                    imageRepository.Remove(item.ImageId);
-                }
+                imageRepository.RemoveRange(imageLst);
+                var priceRepository = this.UnitOfWork.Repository<NTPrice>();
+                var price = product.Product_Price.Price;
+                priceRepository.Remove(price);
+                _repository.Remove(product);
                 this.UnitOfWork.Commit();
             }
             else
             {
-                result.ErrorMsg = $"Id: {model.Id} not found";
+                result.ErrorMsg = $"Id: {id} not found";
             }
             return result;
-            */
         }
     }
 }

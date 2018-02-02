@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Text;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
@@ -121,28 +122,6 @@ namespace NT_MQPublisher.Controllers
                 return new StatusCodeResult(500);
             }
             return BadRequest(ModelState);
-            /*
-            if (ModelState.IsValid)
-            {
-                var dbOpModel = new DbOperationViewModel();
-                dbOpModel.Data = JsonConvert.SerializeObject(model);
-                dbOpModel.OperationRoute = "product.update";
-                
-                var message = JsonConvert.SerializeObject(dbOpModel);
-                
-                var result = this.GetResult(message);
-                if (result.Success)
-                {
-                    return Ok();
-                }
-                else
-                {
-                    _logger.LogError(result.ErrorMsg);
-                }
-                return new StatusCodeResult(500);
-            }
-            return BadRequest(ModelState);
-            */
         }
 
         [HttpGet]
@@ -171,12 +150,16 @@ namespace NT_MQPublisher.Controllers
                 return new StatusCodeResult(500);
             }
             return BadRequest(ModelState);
-            /*
+        }
+
+        [HttpDelete("{id}")]
+        public IActionResult Delete([Required]string id)
+        {
             if (ModelState.IsValid)
             {
                 var dbOpModel = new DbOperationViewModel();
-                dbOpModel.Data = JsonConvert.SerializeObject(model);
-                dbOpModel.OperationRoute = "product.update";
+                dbOpModel.Data = id;
+                dbOpModel.OperationRoute = "product.delete";
                 
                 var message = JsonConvert.SerializeObject(dbOpModel);
                 
@@ -192,7 +175,6 @@ namespace NT_MQPublisher.Controllers
                 return new StatusCodeResult(500);
             }
             return BadRequest(ModelState);
-            */
         }
     }
 }

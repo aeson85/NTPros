@@ -18,6 +18,8 @@ namespace NT_Database.Infrastructure.Handler
 
         public DbHandler(IUnitOfWork unitOfWork) => _unitOfWork = unitOfWork;
 
+        protected Action BeforeCommit;
+
         protected DbOperationResultViewModel CreateReponse(bool success = true, string errorMsg = "")
         {
             return new DbOperationResultViewModel
@@ -41,6 +43,14 @@ namespace NT_Database.Infrastructure.Handler
             var result = this.CreateReponse();
             T entity = JsonConvert.DeserializeObject<T>(entityStr);
             _unitOfWork.Repository<T>().Update(entity);
+            _unitOfWork.Commit();
+            return result;
+        }
+
+        public virtual DbOperationResultViewModel Delete(string id)
+        {
+            var result = this.CreateReponse();
+            _unitOfWork.Repository<T>().Remove(id);
             _unitOfWork.Commit();
             return result;
         }

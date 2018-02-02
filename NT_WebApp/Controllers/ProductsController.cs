@@ -61,27 +61,6 @@ namespace NT_WebApp.Controllers
                 }
             }
             return BadRequest();
-            /* 
-            if (ModelState.IsValid)
-            {
-                var product = _context.Product.Include(p => p.Product_Image_Lst).ThenInclude(p => p.Image).Include(p => p.Product_Price).ThenInclude(p => p.Price).SingleOrDefault(p => p.Id.Equals(model.Id, StringComparison.OrdinalIgnoreCase));
-                if (product != null)
-                {
-                    product = _mapper.Map(model, product);
-                    foreach (var item in _context.Product_Image.Local.ToList())
-                    {
-                        if (_context.Entry(item).State == EntityState.Deleted)
-                        {
-                            var ntImage = _context.NTImage.SingleOrDefault(p => item.ImageId == p.Id);
-                            _context.Entry(ntImage).State = EntityState.Deleted;
-                        }
-                    }
-                    await _context.SaveChangesAsync();
-                    return Ok();
-                }
-            }
-            return BadRequest();
-            */
         }
 
         [HttpGet]
@@ -101,20 +80,6 @@ namespace NT_WebApp.Controllers
                 }
             }
             return BadRequest();
-            /*
-            Expression<Func<Product, bool>> predicate = p => true;
-            if (!string.IsNullOrWhiteSpace(model.Id))
-            {
-                predicate = predicate.AndAlso(p => p.Id.Equals(model.Id, StringComparison.OrdinalIgnoreCase));
-            }
-            else if (!string.IsNullOrWhiteSpace(model.Name))
-            {
-                predicate = predicate.AndAlso(p => EF.Functions.Like(p.Name.ToLower(), $"%{model.Name.ToLower()}%"));
-            }
-            var products = _context.Product.AsNoTracking().Include(p => p.Product_Image_Lst).ThenInclude(p => p.Image).Include(p => p.Product_Price).ThenInclude(p => p.Price).Where(predicate).ToList();
-            var productModels = _mapper.Map<List<ProductCreateViewModel>>(products);
-            return Ok(productModels);
-            */
         }
 
         [HttpDelete("{id}")]
@@ -124,7 +89,7 @@ namespace NT_WebApp.Controllers
             {
                 using (var client = new HttpClient())
                 {
-                    var response = await client.DeleteAsync(_mqPublishServerUrls.GetProductDeleteUrl());
+                    var response = await client.DeleteAsync(string.Format(_mqPublishServerUrls.GetProductDeleteUrl(), id));
                     if (response.StatusCode == HttpStatusCode.OK)
                     {
                         return Ok();

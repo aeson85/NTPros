@@ -24,6 +24,8 @@ namespace NT_Database.Infrastructure.Repository
 
         void Remove(T t);
 
+        void RemoveRange(params T[] entities);
+
         void Update(T entity);
         
         void Add(T entity);

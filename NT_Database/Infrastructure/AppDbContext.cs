@@ -24,7 +24,6 @@ namespace NT_Database.Infrastructure
 
         public AppDbContext(DbContextOptions options) : base(options)
         {
-            Console.WriteLine("实例化 AppDbContext");
         }
 
         public static async Task CreateAdminAccount(IServiceProvider serviceProvider, IConfiguration configuration)

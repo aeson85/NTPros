@@ -15,7 +15,6 @@ namespace NT_Database.Infrastructure.Repository
 
         public UnitOfWork(AppDbContext dbContext)
         {
-            Console.WriteLine("实例化 UnitOfWork");
             _dbContext = dbContext;
         }
 
@@ -26,7 +25,6 @@ namespace NT_Database.Infrastructure.Repository
 
         public void Dispose()
         {
-            Console.WriteLine("销毁 UnitOfWork 实例");
             _dbContext.Dispose();
         }
 

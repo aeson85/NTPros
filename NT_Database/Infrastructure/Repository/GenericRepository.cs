@@ -76,6 +76,11 @@ namespace NT_Database.Infrastructure.Repository
             _dbSet.Remove(entity);
         }
 
+        public void RemoveRange(params T[] entities)
+        {
+            _dbSet.RemoveRange(entities);
+        }
+
         public virtual TResult SingleOrDefault<TResult>(Expression<Func<T, bool>> predicate = null, Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null, Func<IQueryable<T>, IIncludableQueryable<T, object>> include = null, bool disableTracking = false)
         {
             var query = this.Get<TResult>(predicate, orderBy, include, disableTracking);
