@@ -18,9 +18,9 @@ namespace NT_Database.Infrastructure.Handler
 
         public DbOperator(IServiceProvider serviceProvider)
         {
-            _unitOfWork = serviceProvider.GetRequiredService<IUnitOfWork>();
-            _mapper = serviceProvider.GetRequiredService<IMapper>();
             _serviceProvider = serviceProvider;
+            _unitOfWork = _serviceProvider.GetRequiredService<IUnitOfWork>();
+            _mapper = _serviceProvider.GetRequiredService<IMapper>();
         }
 
         public string Execute(string message)

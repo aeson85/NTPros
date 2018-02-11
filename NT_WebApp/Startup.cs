@@ -20,6 +20,7 @@ using Microsoft.AspNetCore.Mvc.Routing;
 using AspNetCore.IServiceCollection.AddIUrlHelper;
 using NT_CommonConfig.Infrastructure;
 using NT_Model.Entity;
+using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 
 namespace NT_WebApp
 {
@@ -40,14 +41,32 @@ namespace NT_WebApp
             // });
             // services.AddIdentity<AppUser, IdentityRole>().AddEntityFrameworkStores<AppDbContext>().AddDefaultTokenProviders();
 
-            services.AddIdentity<AppUser, IdentityRole>(opt => 
+            // services.AddIdentity<AppUser, IdentityRole>(opt => 
+            // {
+            //     opt.Password.RequiredLength = 6;
+            //     opt.Password.RequireNonAlphanumeric = false;
+            //     opt.Password.RequireLowercase = false;
+            //     opt.Password.RequireUppercase = false;
+            //     opt.Password.RequireDigit = false;
+            //     opt.User.RequireUniqueEmail = true;
+            // });
+
+            services.AddAuthentication(opt =>
             {
-                opt.Password.RequiredLength = 6;
-                opt.Password.RequireNonAlphanumeric = false;
-                opt.Password.RequireLowercase = false;
-                opt.Password.RequireUppercase = false;
-                opt.Password.RequireDigit = false;
-                opt.User.RequireUniqueEmail = true;
+                opt.DefaultChallengeScheme = "oidc";
+                opt.DefaultScheme = "Cookies";
+            }).AddCookie("Cookies").AddOpenIdConnect("oidc", opt =>
+            {
+                opt.SignInScheme = "Cookies";
+                opt.Authority = _configuration["AuthServer:Host"];
+                opt.RequireHttpsMetadata = false;
+                opt.ClientId = "mvc";
+                opt.ClientSecret = "secret";
+                opt.ResponseType = OpenIdConnectResponseType.CodeIdToken;
+                opt.GetClaimsFromUserInfoEndpoint = true;
+                opt.SaveTokens = true;
+                opt.Scope.Add("msgpublish_api");
+                opt.Scope.Add("offline_access");
             });
 
             var physicalFileProvider = new PhysicalFileProvider(_configuration["Ftp:RootPath"]);
@@ -99,7 +118,7 @@ namespace NT_WebApp
             });
 
             app.UseCors(builder => builder.WithOrigins("http://localhost").AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin());
-            
+            app.UseAuthentication();
             app.UseMvc(routes =>
             {
                 routes.MapRoute(

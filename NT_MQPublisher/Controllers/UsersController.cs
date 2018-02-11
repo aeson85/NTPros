@@ -32,36 +32,15 @@ namespace NT_MQPublisher.Controllers
         {
             if (ModelState.IsValid)
             {
-                var searchModel = new AppUserSearchViewModel
-                {
-                    Id = model.Id,
-                    WeChatInfo = new WeChatInfo 
-                    {
-                        OpenId = model?.WeChatInfo.OpenId
-                    }
-                };
-                var searchEntity = this.Mapper.Map<AppUser>(searchModel);
-                searchEntity.Id = model.Id;
+                var entity = this.Mapper.Map<AppUser>(model);
+                entity.Id = model.Id;
                 var dbOpModel = new DbOperationViewModel();
-                dbOpModel.Data = JsonConvert.SerializeObject(searchEntity);
-                dbOpModel.OperationRoute = "appuser.select";
+                dbOpModel.Data = JsonConvert.SerializeObject(entity);
+                dbOpModel.OperationRoute = "appuser.upsertforwechat";
                 var message = JsonConvert.SerializeObject(dbOpModel);
                 var result = this.GetResult(message);
                 if (result.Success)
                 {
-                    var appUsers = JsonConvert.DeserializeObject<List<AppUser>>(result.Data);
-                    if (appUsers.Count() == 0)
-                    {
-                        var entity = this.Mapper.Map<AppUser>(model);
-                        dbOpModel.Data = JsonConvert.SerializeObject(entity);
-                        dbOpModel.OperationRoute = "appuser.create";
-                        message = JsonConvert.SerializeObject(dbOpModel);
-                        result = this.GetResult(message);
-                    }
-                    else
-                    {
-                        
-                    }
                     return Ok();
                 }
                 else

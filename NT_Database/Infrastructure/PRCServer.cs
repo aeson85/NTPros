@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics;
 using System.Text;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -50,7 +51,8 @@ namespace NT_Database.Infrastructure
                 try
                 {
                     var message = Encoding.UTF8.GetString(body);
-                    using (var dbOperator = _serviceProvider.GetRequiredService<DbOperator>())
+                    using (var scope = _serviceProvider.CreateScope())
+                    using (var dbOperator = scope.ServiceProvider.GetRequiredService<DbOperator>())
                     {
                         response = dbOperator.Execute(message);
                     }

@@ -40,37 +40,37 @@ namespace NT_MQConsumer.Infrastructure.Handler
                 switch (weChatMsg.EventInfo.EventType)
                 {
                     case WeChatEventType.Subscribe:
-                    {
-                        //var basicUserInfo = await _weChatUtilities.GetUserInfo(weChatMsg.FromUserName);
-                        var basicUserInfo = new WeChatUserBasicInfo
-                        {
-                            Subscribe = 1,
-                            OpenId = "orW9-jh1BQUU40t5yqnPH7SDHhzs",
-                            NickName = "大mm",
-                            Sex = 1,
-                            Language = "zh-cn",
-                            City = "成都",
-                            Province = "四川",
-                            Country = "中国",
-                            HeadImgUrl = "http://wx.qlogo.cn/mmopen/g3MonUZtNHkdmzicIlibx6iaFqAc56vxLSUfpb6n5WKSYVY0ChQKkiaJSgQ1dZuTOgvLLrhJbERQQ4eMsv84eavHiaiceqxibJxCfHe/0",
-                            Subscribe_Time = 1382694957,
-                            Unionid = "o6_bmasdasdsad6_2sgVt7hMZOPfL",
-                            Remark = "Remark",
-                            GroupId = 0,
-                            Tagid_List = new int[] { 128, 2 }
-                        };
-
-                        this.SaveToDb(basicUserInfo);
-                    }
-                    break;
                     case WeChatEventType.UnSubscribe:
                     {
+                        var basicUserInfo = await _weChatUtilities.GetUserInfo(weChatMsg.FromUserName);
+                        this.SaveToDb(basicUserInfo);
                     }
                     break;
                 }
             }
         }
 
+        private WeChatUserBasicInfo GetTestWeChatUserBasicInfo()
+        {
+            var basicUserInfo = new WeChatUserBasicInfo
+            {
+                Subscribe = 0,
+                OpenId = "orW9-jh1BQUU40t5yqnPH7SDHhzs",
+                NickName = "大mm",
+                Sex = 1,
+                Language = "zh-cn",
+                City = "成都",
+                Province = "四川",
+                Country = "中国",
+                HeadImgUrl = "http://wx.qlogo.cn/mmopen/g3MonUZtNHkdmzicIlibx6iaFqAc56vxLSUfpb6n5WKSYVY0ChQKkiaJSgQ1dZuTOgvLLrhJbERQQ4eMsv84eavHiaiceqxibJxCfHe/0",
+                Subscribe_Time = 1382694957,
+                Unionid = "o6_bmasdasdsad6_2sgVt7hMZOPfL",
+                Remark = "Remark",
+                GroupId = 0,
+                Tagid_List = new int[] { 128, 2 }
+            };
+            return basicUserInfo;
+        }
         private async void SaveToDb(WeChatUserBasicInfo weChatUserBasicInfo)
         {
             var url = _mqPublishServerUrls.GetWechatUserInfoSaveUrl();

@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using NT_CommonConfig.Infrastructure;
 using NT_MQPublisher.Infrastructure;
 
@@ -26,7 +27,14 @@ namespace NT_MQPublisher
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc();
-            
+
+            services.AddAuthentication("Bearer").AddIdentityServerAuthentication(opt =>
+            {
+                opt.Authority = _configuration["AuthServer:Host"];
+                opt.RequireHttpsMetadata = false;
+                opt.ApiName = "msgpublish_api";
+            });
+
             services.AddSingleton(provider => new MapperConfiguration(cfg =>
             {
                 cfg.AddProfile(new DbEntityProfile(_configuration));
@@ -42,6 +50,7 @@ namespace NT_MQPublisher
             app.UseStatusCodePages();
             app.UseDeveloperExceptionPage();
             app.UseStatusCodePages();
+            app.UseAuthentication();
             app.UseMvcWithDefaultRoute();
             
         }

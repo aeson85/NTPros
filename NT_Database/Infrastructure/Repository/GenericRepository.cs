@@ -12,10 +12,10 @@ namespace NT_Database.Infrastructure.Repository
 {
     public abstract class GenericRepository<T> : IRepository<T> where T : class, IBaseEntity
     {
-        private readonly AppDbContext _dbContext;
+        private readonly DbContext _dbContext;
         private readonly DbSet<T> _dbSet;
 
-        public GenericRepository(AppDbContext dbContext)
+        public GenericRepository(DbContext dbContext)
         {
             _dbContext = dbContext;
             _dbSet = _dbContext.Set<T>();
@@ -95,7 +95,8 @@ namespace NT_Database.Infrastructure.Repository
 
         public virtual void Update(T entity)
         {
-            _dbContext.Entry(entity).State = EntityState.Modified;
+            _dbSet.Update(entity);
+            //_dbContext.Entry(entity).State = EntityState.Modified;
         }
     }
 }

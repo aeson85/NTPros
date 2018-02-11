@@ -23,5 +23,11 @@ namespace NT_WebApp.Controllers
 
         public ViewResult Test() => View();
 
+        public ViewResult MemberInfo() => View();
+
+        public ViewResult MemberInfoForm() => View();
+
+        public ViewResult MemberRegist() => View();
+
     }
 }

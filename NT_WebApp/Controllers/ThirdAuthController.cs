@@ -29,10 +29,6 @@ namespace NT_WebApp.Controllers
                 responseText = $"<xml><ToUserName><![CDATA[{weChatMsg.FromUserName}]]></ToUserName><FromUserName><![CDATA[{weChatMsg.ToUserName}]]></FromUserName><CreateTime>{weChatMsg.CreateTime}</CreateTime> <MsgType><![CDATA[text]]></MsgType><Content><![CDATA[你好,欢迎来到老B之家！！！]]></Content> </xml>";
                 contentType = "application/xml";
             }
-            else if (this.Request.Method.Equals("get", StringComparison.OrdinalIgnoreCase))
-            {
-                this.Response.ContentType = "application/xml";
-            }
             this.Response.ContentType = contentType;
             this.Response.WriteAsync(responseText);
         }

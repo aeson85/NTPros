@@ -14,6 +14,9 @@ using Newtonsoft.Json;
 using NT_Model.Entity;
 using NT_Model.ViewModel;
 using NT_CommonConfig.Infrastructure;
+using Microsoft.AspNetCore.Authentication;
+using IdentityModel;
+using IdentityModel.Client;
 
 namespace NT_WebApp.Controllers
 {
@@ -70,6 +73,8 @@ namespace NT_WebApp.Controllers
             {
                 using (var client = new HttpClient())
                 {
+                    var accessToken = await this.HttpContext.GetTokenAsync("access_token");
+                    client.SetBearerToken(accessToken);
                     var response = await client.GetAsync(string.Format(_mqPublishServerUrls.GetProductSelectUrl(), model.Name, model.Id));
                     if (response.StatusCode == HttpStatusCode.OK)
                     {

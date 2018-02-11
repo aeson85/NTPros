@@ -27,10 +27,6 @@ namespace NT_CommonConfig.Infrastructure
             this.CreateMap<Product_Price, Product_Price>().ForAllMembers(p => p.Condition((s, d, sm, dm) => sm != null));
             this.CreateMap<Product, Product>().ForAllMembers(p => p.Condition((s, d, sm, dm) => sm != null));
             
-            this.CreateMap<WeChatInfo, WeChatInfo>().ForAllMembers(p => p.Condition((s, d, sm, dm) => sm != null));
-            this.CreateMap<AppUserViewModel, AppUser>().ForAllMembers(p => p.Condition((s, d, sm, dm) => sm != null));
-            this.CreateMap<AppUserSearchViewModel, AppUser>().ForAllMembers(p => p.Condition((s, d, sm, dm) => sm != null));
-            
             this.CreateMap<ProductCreateViewModel, Product>().ForMember(p => p.Product_Image_Lst, opt => 
             {
                 opt.ResolveUsing<List<Product_Image>>((s, d, dm, c) => 
@@ -94,6 +90,11 @@ namespace NT_CommonConfig.Infrastructure
                     return dm;
                 });
             }).ForAllMembers(p => p.Condition((s, d, sm, dm) => sm != null)); 
+
+            this.CreateMap<WeChatInfo, WeChatInfo>().ForAllMembers(p => p.Condition((s, d, sm, dm) => sm != null));
+            this.CreateMap<AppUserViewModel, AppUser>().ForAllMembers(p => p.Condition((s, d, sm, dm) => sm != null));
+            this.CreateMap<AppUserSearchViewModel, AppUser>().ForAllMembers(p => p.Condition((s, d, sm, dm) => sm != null));
+            this.CreateMap<AppUser, AppUser>().ForAllMembers(p => p.Condition((s, d, sm, dm) => sm != null));
         }
     }
 }

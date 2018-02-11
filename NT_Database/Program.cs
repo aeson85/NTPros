@@ -28,7 +28,7 @@ namespace NT_Database
             program.ConfigureServices(serviceCollection);
 
             var serviceProvider = serviceCollection.BuildServiceProvider();
-
+    
             using (var rpcServer = serviceProvider.GetRequiredService<RPCServer>())
             {
                 rpcServer.Start();
@@ -47,22 +47,30 @@ namespace NT_Database
         {
             services.AddSingleton<IConfiguration>(_configuration);
             services.AddSingleton<RPCServer>();
-            services.AddTransient<IUnitOfWork, UnitOfWork>();
-            services.AddTransient<DbOperator>();
             services.AddSingleton<ILoggerFactory, LoggerFactory>();
-            services.AddTransient<ProductDbHandler>();
-            services.AddTransient<AppUserDbHandler>();
+            services.AddSingleton(provider => new MapperConfiguration(cfg =>
+            {
+                cfg.AddProfile(new DbEntityProfile(_configuration));
+            }).CreateMapper());
+
+            services.AddScoped<DbOperator>();
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
+            services.AddScoped<ProductDbHandler>();
+            services.AddScoped<AppUserDbHandler>();
+            services.AddScoped<ProductRepository>();
+            services.AddScoped<AppUserRepository>();
 
             services.AddDbContext<AppDbContext>(opts =>
             {
                 opts.UseMySQL(_configuration["Database:ConnectionString"]);
                 opts.EnableSensitiveDataLogging(true);
-            }, ServiceLifetime.Transient);
-            services.AddSingleton(provider => new MapperConfiguration(cfg =>
+            }, ServiceLifetime.Scoped);
+
+            services.AddDbContext<AppUserDbContext>(opts =>
             {
-                cfg.AddProfile(new DbEntityProfile(_configuration));
-            }).CreateMapper());
-            
+                opts.UseMySQL(_configuration["Database:UserConnectionString"]);
+                opts.EnableSensitiveDataLogging(true);
+            }, ServiceLifetime.Scoped);
 
             JsonConvert.DefaultSettings = () => new JsonSerializerSettings
             {

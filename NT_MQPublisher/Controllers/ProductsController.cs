@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
@@ -16,6 +17,7 @@ using RabbitMQ.Client.Events;
 namespace NT_MQPublisher.Controllers
 {
     [Route("api/[controller]")]
+    //[Authorize]
     public class ProductsController : DBOpController
     {
         public ProductsController(ConnectionConfig connectionConfig, IMapper mapper, ILoggerFactory loggerFactory) : base(connectionConfig, mapper, loggerFactory)

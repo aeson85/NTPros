@@ -1,6 +1,6 @@
 (function(window){
 	var admin = {};
-	admin.debug = true;
+	admin.debug = false;
 	admin.path = admin.debug?"http://47.104.84.30":""
 	admin.curPage = null;
 	window.admin = admin;

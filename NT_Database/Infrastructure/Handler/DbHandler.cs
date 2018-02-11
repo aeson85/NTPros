@@ -6,19 +6,13 @@ using NT_Model.ViewModel;
 
 namespace NT_Database.Infrastructure.Handler
 {
-    public interface IDbHandler<T> where T : class, IBaseEntity
-    {
-    }
-
-    public abstract class DbHandler<T> : IDbHandler<T> where T : class, IBaseEntity
+    public abstract class DbHandler<T> where T : class, IBaseEntity
     {
         private readonly IUnitOfWork _unitOfWork;
 
         protected IUnitOfWork UnitOfWork => _unitOfWork;
 
         public DbHandler(IUnitOfWork unitOfWork) => _unitOfWork = unitOfWork;
-
-        protected Action BeforeCommit;
 
         protected DbOperationResultViewModel CreateReponse(bool success = true, string errorMsg = "")
         {
