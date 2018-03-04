@@ -42,6 +42,7 @@ namespace NT_MQConsumer.Infrastructure.Handler
                     case WeChatEventType.Subscribe:
                     case WeChatEventType.UnSubscribe:
                     {
+                        //var basicUserInfo = this.GetTestWeChatUserBasicInfo();
                         var basicUserInfo = await _weChatUtilities.GetUserInfo(weChatMsg.FromUserName);
                         this.SaveToDb(basicUserInfo);
                     }

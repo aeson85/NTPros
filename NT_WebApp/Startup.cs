@@ -123,15 +123,16 @@ namespace NT_WebApp
             {
                 routes.MapRoute(
                     name: "",
-                    template: "nt/{action=index}",
+                    template: "{action=index}",
                     defaults: new { controller = "home"}
                 );
 
                 routes.MapRoute(
                     name: "",
-                    template: "nt/{controller=admin}/{action=index}"
+                    template: "{controller=admin}/{action=index}/{id?}"
                 );
             });
+            
             //AppDbContext.CreateAdminAccount(app.ApplicationServices, this.Configuration).Wait();
         }
     }
