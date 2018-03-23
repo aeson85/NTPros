@@ -16,7 +16,6 @@ namespace NT_MQPublisher.Controllers
 {
     public abstract class DBOpController : Controller
     {
-        
         private readonly ConnectionConfig _connectionConfig;
         private readonly IModel _channel;
         private readonly ILogger _logger;
