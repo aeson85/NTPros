@@ -1,0 +1,45 @@
+version: '3'
+
+services:
+  nt_webapp:
+    volumes:
+      - /c/ProgramData/NTPros/Docker/Volumes/WebApp/Resources:/publish/resources
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+    ports:
+      - "5000:80"
+
+  nt_mqpublisher:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+    ports:
+      - "80"
+
+  nt_rabbitmq:
+    ports:
+      - "15672:15672"
+
+  nt_mysql:
+    volumes:
+      - /c/ProgramData/NTPros/Docker/Volumes/MySQL/Data:/var/lib/mysql
+    ports:
+      - "3306:3306"
+
+  nt_cache:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+    ports:
+      - "80"
+
+  nt_redis:
+    ports:
+      - "6379:6379"
+    volumes:
+      - /c/ProgramData/NTPros/Docker/Volumes/Redis/Data:/data
+
+  nt_nginx:
+    volumes:
+      - /c/ProgramData/NTPros/Docker/Volumes/Nginx/Conf:/etc/nginx
+    ports:
+      - "80:80"
+

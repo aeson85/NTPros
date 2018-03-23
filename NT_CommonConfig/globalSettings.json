@@ -1,32 +1,32 @@
 {
-    "Database": {
-        "ConnectionString": "server=localhost;database=ntprodb;user=root;password=aspnetcore2018",
-        "UserConnectionString": "server=localhost;database=ntprouserdb;user=root;password=aspnetcore2018"
-    },
-    "RabbitMQ": {
-        "HostName": "localhost",
-        "Port": 5672,
-        "ExchangeName": "nt_topic_exchange",
-        "Wechat": {
-            "QueueName": "wechat_queue"
-        }
-    },
-    "Redis": {
-        "Host": "localhost:6379",
-        "InstanceName": "master"
-    },
-    "CacheServer": {
-        "Url": "http://localhost:5002/api/cache"
-    },
-    "MQPublishServer": {
-        "Host": "http://localhost:5001",
-        "Url": "api/publish/message?routingkey={0}&queuename={1}&exchangeName={2}"
-    },
-    "WeChat": {
-        "AppID": "wx033d80670080773e",
-        "AppSecret": "ebd7404e8ccfe993b6f063529325c7e7"
-    },
-    "AuthServer": {
-        "Host": "http://localhost:5003"
+  "Database": {
+    "ConnectionString": "server=nt_mysql;database=ntprodb;user=root;password=Cosmicworks123",
+    "UserConnectionString": "server=nt_mysql;database=ntprouserdb;user=root;password=Cosmicworks123"
+  },
+  "RabbitMQ": {
+    "HostName": "nt_rabbitmq",
+    "Port": 5672,
+    "ExchangeName": "nt_topic_exchange",
+    "Wechat": {
+      "QueueName": "wechat_queue"
     }
+  },
+  "Redis": {
+    "Host": "localhost:6379",
+    "InstanceName": "master"
+  },
+  "CacheServer": {
+    "Url": "http://localhost:5002/api/cache"
+  },
+  "MQPublishServer": {
+    "Host": "http://nt_mqpublisher",
+    "Url": "api/publish/message?routingkey={0}&queuename={1}&exchangeName={2}"
+  },
+  "WeChat": {
+    "AppID": "wx033d80670080773e",
+    "AppSecret": "ebd7404e8ccfe993b6f063529325c7e7"
+  },
+  "AuthServer": {
+    "Host": "http://localhost:5003"
+  }
 }

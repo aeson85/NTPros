@@ -73,7 +73,7 @@ namespace NT_WebApp
                 services.AddTransient<IConfigureOptions<KestrelServerOptions>, KestrelServerOptionsSetup>();
             })
             .UseStartup<Startup>()
-            .UseUrls("http://localhost:5000")
+            //.UseUrls("http://*:5000")
             .Build();
         }
     }

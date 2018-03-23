@@ -66,7 +66,7 @@ namespace NT_MQPublisher
                 options.ValidateScopes = context.HostingEnvironment.IsDevelopment();
             })
             .UseStartup<Startup>()
-            .UseUrls("http://localhost:5001")
+            //.UseUrls("http://localhost:5001")
             .Build();
         }
     }

@@ -1,0 +1,67 @@
+version: '3'
+
+services:
+  nt_webapp:
+    image: ntwebapp
+    container_name: nt_webapp
+    build:
+      context: .
+      dockerfile: NT_WebApp/Dockerfile
+   
+  nt_mqpublisher:
+    image: ntmqpublisher
+    container_name: nt_mqpublisher
+    depends_on:
+      - nt_rabbitmq
+    build:
+      context: .
+      dockerfile: NT_MQPublisher/Dockerfile
+
+  nt_database:
+    image: ntdatabase
+    container_name: nt_database
+    depends_on:
+      - nt_rabbitmq
+      - nt_mysql
+    build:
+      context: .
+      dockerfile: NT_Database/Dockerfile
+
+  nt_rabbitmq:
+    image: ntrabbitmaq
+    container_name: nt_rabbitmq
+    build:
+      context: .
+      dockerfile: /NT_DockerConfig/Dockerfile.RabbitMQ
+
+  nt_mysql:
+    image: mysql
+    container_name: nt_mysql
+    build:
+      context: .
+      dockerfile: /NT_DockerConfig/Dockerfile.MySql
+    command: mysqld --lower_case_table_names=1
+
+  nt_cache:
+    image: ntcache
+    container_name: nt_cache
+    depends_on:
+      - nt_redis
+    build:
+      context: .
+      dockerfile: NT_Cache/Dockerfile
+
+  nt_redis:
+    image: ntredis
+    container_name: nt_redis
+    build:
+      context: .
+      dockerfile: /NT_DockerConfig/Dockerfile.Redis
+
+  nt_nginx:
+    image: nginx
+    container_name: nt_nginx
+    build:
+      context: .
+      dockerfile: /NT_DockerConfig/Dockerfile.Nginx
+

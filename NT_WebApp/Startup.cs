@@ -65,10 +65,10 @@ namespace NT_WebApp
                 opt.ResponseType = OpenIdConnectResponseType.CodeIdToken;
                 opt.GetClaimsFromUserInfoEndpoint = true;
                 opt.SaveTokens = true;
+                opt.Authority = "http://localhost:5001";
                 opt.Scope.Add("msgpublish_api");
                 opt.Scope.Add("offline_access");
             });
-
             var physicalFileProvider = new PhysicalFileProvider(_configuration["Ftp:RootPath"]);
             services.AddSingleton<IFileProvider>(physicalFileProvider);
 
@@ -132,7 +132,6 @@ namespace NT_WebApp
                     template: "{controller=admin}/{action=index}/{id?}"
                 );
             });
-            
             //AppDbContext.CreateAdminAccount(app.ApplicationServices, this.Configuration).Wait();
         }
     }

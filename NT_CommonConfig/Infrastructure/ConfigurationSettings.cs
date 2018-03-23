@@ -11,7 +11,8 @@ namespace NT_CommonConfig.Infrastructure
         {
             config = config ?? new ConfigurationBuilder();
             var env = hostingContext?.HostingEnvironment;
-            var settingPath = Path.GetFullPath(Path.Combine(@"../NT_CommonConfig/globalSettings.json"));
+
+            var settingPath = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "globalSettings.json");
 
             config.AddJsonFile(path:settingPath, optional: true, reloadOnChange: true);
             config.SetBasePath(Directory.GetCurrentDirectory()).AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
